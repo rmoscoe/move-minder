@@ -15,7 +15,7 @@ from phonenumber_field.formfields import PhoneNumberField
 
 # Create your views here.
 class HomePageView(TemplateView):
-    template_name = "home.html"
+    template_name = "tracker/home.html"
 
     """
     def get_context_data(self, **kwargs):
@@ -26,7 +26,7 @@ class HomePageView(TemplateView):
 
 class SignupView(CreateView):
     model = User
-    template_name = "signup.html"
+    template_name = "tracker/signup.html"
     first_name = forms.CharField(max_length=40)
     last_name = forms.CharField(max_length=40)
     phone = PhoneNumberField()
@@ -35,13 +35,11 @@ class SignupView(CreateView):
     fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
 
 class DashboardView(TemplateView, LoginRequiredMixin):
-    template_name = "dashboard.html"
-    login_url = reverse_lazy("login")
+    template_name = "tracker/dashboard.html"
 
 class UserListView(ListView, LoginRequiredMixin):
     model = User
     paginate_by = 50
-    login_url = reverse_lazy("login")
     context_object_name = "users"
 
 class UserDetailView(DetailView, LoginRequiredMixin):
@@ -93,7 +91,7 @@ class ParcelCreateView(CreateView, LoginRequiredMixin):
     fields = ["type", "room", "contents", "photo", "weight"]
 
 class ParcelStatusUpdateView(SingleObjectMixin, FormView, LoginRequiredMixin):
-    template_name = "parcel_detail.html"
+    template_name = "tracker/parcel_detail.html"
     form_class = ParcelStatusForm
     model = Parcel
 

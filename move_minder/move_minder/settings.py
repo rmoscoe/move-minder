@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -43,7 +44,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
-    'tracker'
+    'tailwind',
+    'tracker',
+    'theme',
+    'django_browser_reload'
+]
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    '127.0.0.1'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +64,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'move_minder.auth_header_middleware.AuthenticationHeaderMiddleware'
+    'move_minder.auth_header_middleware.AuthenticationHeaderMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware'
 ]
 
 ROOT_URLCONF = 'move_minder.urls'
@@ -93,6 +104,11 @@ DATABASES = {
     }
 }
 
+# Authentication
+
+LOGIN_URL = reverse_lazy("login")
+
+LOGIN_REDIRECT_URL = reverse_lazy("dashboard")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

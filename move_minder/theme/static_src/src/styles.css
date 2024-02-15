@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.light-page {
+    @apply bg-white text-slate-500 font-sans text-base;
+}
+
+.dark-page {
+    @apply bg-slate-900 text-slate-400 font-sans text-base;
+}
+
+.light-box {
+    @apply bg-slate-200 text-slate-600;
+}
+
+.dark-box {
+    @apply bg-slate-800 text-slate-300;
+}
+
+.light-card {
+    @apply p-4 rounded-lg shadow-lg shadow-slate-700 transition lg:p6;
+}
+
+.dark-card {
+    @apply p-4 rounded-lg shadow-lg shadow-slate-400 transition lg:p6;
+}
+
+.primary {
+    @apply bg-blue-600!important text-slate-200!important dark:bg-blue-700!important dark:text-slate-300!important;
+}
+
+.secondary {
+    @apply bg-violet-500!important text-slate-600!important dark:bg-violet-600!important dark:text-slate-300!important;
+}
+
+.accent {
+    @apply bg-purple-400!important text-slate-600!important dark:bg-purple-500!important dark:text-slate-100!important;
+}
+
+.info {
+    @apply text-sky-400!important dark:text-sky-500!important;
+}
+
+.success {
+    @apply bg-emerald-500 dark:bg-emerald-600;
+}
+
+.warning {
+    @apply bg-yellow-400 dark:bg-yellow-500;
+}
+
+.danger {
+    @apply bg-red-500 dark:bg-red-600;
+}
+
+h1 {
+    @apply text-4xl text-black font-bold dark:text-white;
+}
+
+h2 {
+    @apply text-3xl text-slate-950 font-bold dark:text-slate-50;
+}
+
+h3 {
+    @apply text-2xl text-slate-900 font-semibold dark:text-slate-100;
+}
+
+h4 {
+    @apply text-xl text-slate-800 font-semibold dark:text-slate-200;
+}
+
+h5 {
+    @apply text-lg text-slate-700 dark:text-slate-300;
+}
+
+h6 {
+    @apply font-bold text-slate-600 dark:text-slate-300;
+}
+
+.btn {
+    @apply px-4 py-2 rounded-none font-semibold cursor-pointer items-center justify-center text-center shadow-md disabled:pointer-events-none disabled:cursor-not-allowed text-white dark:text-slate-300 focus:border-2;
+}
+
+.btn.success {
+    @apply success hover:bg-emerald-600 focus:border-emerald-200 disabled:bg-emerald-300 dark:text-slate-300 dark:hover:bg-emerald-700 dark:focus:border-emerald-300 dark:disabled:bg-emerald-400;
+}
+
+.btn.danger {
+    @apply danger hover:bg-red-600 focus:border-red-200 disabled:bg-red:300 dark:text-slate-300 dark:hover:bg-red-700 dark:focus:border-red-300 dark:disabled:bg-red-400;
+}
+
+.btn.primary {
+    @apply primary hover:bg-blue-700 focus:border-blue-300 disabled:bg-blue-400 dark:text-slate-300 dark:hover:bg-blue-800 dark:focus:border-blue-400 dark:disabled:bg-blue-700;
+}
+
+input, select, textarea {
+    @apply rounded-lg border border-slate-400 placeholder-slate-400 disabled:bg-slate-300 dark:disabled:bg-slate-600 focus:border-blue-600 dark:focus:border-blue-700 invalid:border-red-500 dark:invalid:border-red-600 disabled:pointer-events-none disabled:cursor-not-allowed;
+}
+
+input, textarea {
+    @apply cursor-text focus:caret-blue-600 dark:focus:caret-blue-700 invalid:caret-red-500 dark:invalid:caret-red-600;
+}
+
+select {
+    @apply cursor-pointer;
+}
+
+textarea {
+    @apply resize;
+}
+
+option {
+    @apply text-sm;
+}
