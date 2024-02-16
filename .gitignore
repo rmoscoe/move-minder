@@ -12,6 +12,7 @@ scripts/outputs*
 scripts/results/
 
 # Tailwind/Webpack Build
+move_minder/theme/static/
 
 # Node #
 node_modules
@@ -127,3 +128,5 @@ GitHub.sublime-settings
 
 # Misc
 .DS_Store
+*.pptx
+*.ppt

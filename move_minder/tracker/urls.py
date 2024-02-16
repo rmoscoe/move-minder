@@ -7,7 +7,7 @@ app_name = "tracker"
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
     path("sign-up/", SignupView.as_view(), name="sign-up"),
-    path("login/", LoginView.as_view(), name="login"),
+    path("login/", LoginView.as_view(template_name="tracker/login.html"), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("dashboard/", DashboardView.as_view(), name="dashboard"),
     path("users/", UserListView.as_view(), name="users-list"),
