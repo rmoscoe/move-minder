@@ -13,6 +13,7 @@ scripts/results/
 
 # Tailwind/Webpack Build
 move_minder/theme/static/
+moveminder_tracker/static/
 
 # Node #
 node_modules
@@ -130,3 +131,5 @@ GitHub.sublime-settings
 .DS_Store
 *.pptx
 *.ppt
+/static
+/move_minder/static

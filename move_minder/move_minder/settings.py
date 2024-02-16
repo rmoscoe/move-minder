@@ -73,7 +73,7 @@ ROOT_URLCONF = 'move_minder.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'tracker/templates/tracker')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,16 +142,27 @@ USE_TZ = True
 
 
 #AWS
+
 AWS_STORAGE_BUCKET_NAME='move-minder'
+
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
+
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = f'{BASE_DIR}/static'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "tracker/static",
+    "move_minder/theme/static"
+]
 
 STORAGES = {
     "default": {
