@@ -8,8 +8,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
+        <title>{% block title %}{% endblock %}MoveMinder</title>
+        <meta name="description" content="Track the status and contents of your possessions during a move with ease.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
 		{% tailwind_css %}
@@ -21,11 +21,14 @@
             }
         </script>
     </head>
-    <body>
+    <body class="light-page dark:dark-page mx-auto px-4 sm:px-6 md:px-8">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        
+        {%include "components/header.html" %}
+        {% block main %}
+        {% endblock %}
+        {%include "components/footer.html" %}
         <script src="" async defer></script>
     </body>
 </html>
