@@ -79,7 +79,7 @@ h6 {
 }
 
 .btn {
-    @apply px-4 py-2 rounded-none font-semibold cursor-pointer items-center justify-center text-center shadow-md disabled:pointer-events-none disabled:cursor-not-allowed text-white dark:text-slate-300 focus:border-2;
+    @apply block px-4 py-2 rounded-none font-semibold cursor-pointer items-center justify-center text-center shadow-md disabled:pointer-events-none disabled:cursor-not-allowed text-white dark:text-slate-300 focus:border-2 w-full sm:w-36 md:w-44 lg:w-52 xl:w-56;
 }
 
 .btn.success {
@@ -115,15 +115,10 @@ option {
 }
 
 .hero-image {
-    @apply h-40 sm:h-48 md:h-60 lg:h-96 xl:h-[44rem] bg-center bg-no-repeat bg-cover relative;
+    @apply h-56 sm:h-60 md:h-72 lg:h-96 xl:h-[44rem] bg-center bg-no-repeat bg-cover relative;
     background-image: linear-gradient(rgba(255, 255, 255, .25), rgba(255, 255, 255, .25)), url("/static/tracker/hero-image.jpg");
-    /* height: 44rem; */
-    /* background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative; */
 }
 
 .hero-text {
-    @apply text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+    @apply text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full;
 }

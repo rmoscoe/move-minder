@@ -6,14 +6,38 @@
         <div class="hero-text">
             <h1>MoveMinder</h1>
             <p class="text-2xl text-slate-800 font-semibold">Organize | Track | Recover</p>
-            <div class="my-3 sm:my-3.5 md:my-4 lg:my-6 xl:my-8 md:flex md:flex-nowrap md:justify-center md:items-center">
-                {% comment %} Get Started and Login buttons {% endcomment %}
+            <div class="px-6  sm:px-0 mx-auto my-3 sm:my-3.5 md:my-4 lg:my-6 xl:my-8 sm:flex sm:flex-nowrap sm:justify-center sm:items-center">
+                <a class="btn primary mx-auto sm:mr-4" href="/sign-up">Get Started</a>
+                <a class="btn primary mx-auto mt-4 sm:mt-0 sm:ml-4" href="/login">Login</a>
             </div>
         </div>
     </section>
 
-    <section id="content" class="my-4 md:my-6 lg:my-8 md:flex md:flex-nowrap md:justify-between">
+    <section id="content" class="my-4 md:my-6 lg:my-8 md:flex md:flex-nowrap md:justify-between px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10">
         {% comment %} Three sections (columns at medium and above): Organize Your Move, Track Your Belongings, Recover Any Losses {% endcomment %}
+        <section id="organize" class="w-full mt-4 sm:mt-6 md:mt-0 md:w-1/3 flex justify-center md:p-4">
+            <div class="w-full">
+                <img src="/static/tracker/form-angled-forward-cropped.jpg" alt="A computer screen showing input fields related to a parcel" class="mx-auto" />
+                <h2 class="mt-2 sm:mt-3 sm:mb-1 md:mt-5 md:mb-3 lg:mt-7 lg:mb-5 text-center">Organize</h2>
+                <p>{% lorem %}</p>
+            </div>
+        </section>
+
+        <section id="track" class="w-full md:w-1/3 light-box flex justify-center mt-4 sm:mt-6 md:mt-0 md:p-4">
+            <div class="w-full">
+                <img src="/static/tracker/status-update-cropped.png" class="w-full" alt="A phone screen showing a status update menu" />
+                <h2 class="mt-2 sm:mt-3 sm:mb-1 md:mt-5 md:mb-3 lg:mt-7 lg:mb-5 text-center">Track</h2>
+                <p>{% lorem %}</p>
+            </div>
+        </section>
+
+        <section id="recover" class="w-full mt-4 sm:mt-6 md:mt-0 md:w-1/3 flex justify-center md:p-4">
+            <div class="w-full">
+                <img src="/static/tracker/damaged-box.jpeg" alt="mover delivers a damaged, crushed box out of the back of a moving van to a man and woman" />
+                <h2 class="mt-2 sm:mt-3 sm:mb-1 md:mt-5 md:mb-3 lg:mt-7 lg:mb-5 text-center">Recover</h2>
+                <p>{% lorem %}</p>
+            </div>
+        </section>
     </section>
 </main>
 {% endblock %}
