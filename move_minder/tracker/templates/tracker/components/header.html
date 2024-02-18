@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<header class="light-page cursor-pointer flex flex-nowrap items-center justify-between fixed top-0 left-0 right-0 z-30">
+    <section class="flex flex-nowrap items-center justify-between space-x-6 px-4 md:px-6 xl:px-8">
+        <button id="nav-burger" class="md:hidden">
+            <h2>
+                <i class="fa-solid fa-bars"></i>
+            </h2>
+        </button>
+        <a class="flex flex-nowrap items-center justify-between space-x-3" href="{% if user.logged_in %}/dashboard/{% else %}/{% endif %}">
+            <img src="/static/tracker/box-house.jpg" alt="Logo: a box with open flaps forming the shape of a house" class="size-8 sm:size-10 md:size-14 lg:size-20 xl:size-24" />
+            <h1>MoveMinder</h1>
+        </a>
+    </section>
+    <nav class="hidden md:flex"></nav>
+</header>
