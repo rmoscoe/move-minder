@@ -55,23 +55,23 @@
 } */
 
 h1 {
-    @apply text-6xl text-black font-bold dark:text-white;
+    @apply text-4xl sm:text-5xl md:text-6xl text-black font-bold dark:text-white;
 }
 
 h2 {
-    @apply text-4xl text-slate-950 font-bold dark:text-slate-50;
+    @apply text-2xl sm:text-3xl md:text-4xl text-slate-950 font-bold dark:text-slate-50;
 }
 
 h3 {
-    @apply text-2xl text-slate-900 font-semibold dark:text-slate-100;
+    @apply text-xl sm:text-2xl text-slate-900 font-semibold dark:text-slate-100;
 }
 
 h4 {
-    @apply text-xl text-slate-800 font-semibold dark:text-slate-200;
+    @apply text-lg sm:text-xl text-slate-800 font-semibold dark:text-slate-200;
 }
 
 h5 {
-    @apply text-lg text-slate-700 dark:text-slate-300;
+    @apply sm:text-lg text-slate-700 dark:text-slate-300;
 }
 
 h6 {
@@ -124,5 +124,5 @@ option {
 }
 
 #hamburger-menu.active {
-    @apply left-0 duration-200;
+    @apply left-0;
 }
