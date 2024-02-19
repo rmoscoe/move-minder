@@ -34,6 +34,10 @@ class SignupView(CreateView):
     success_url = reverse_lazy('sign-up')
     fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
 
+class UserUpdateView(UpdateView, LoginRequiredMixin):
+    model = User
+    fields = ["first_name", "last_name", "username", "password1", "password2", "email", "phone"]
+
 class DashboardView(TemplateView, LoginRequiredMixin):
     template_name = "tracker/dashboard.html"
 

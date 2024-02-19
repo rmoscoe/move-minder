@@ -19,11 +19,11 @@
 }
 
 .light-card {
-    @apply p-4 rounded-lg shadow-lg shadow-slate-700 transition lg:p-6;
+    @apply light-page p-4 rounded-lg shadow-lg shadow-slate-700 transition lg:p-6;
 }
 
 .dark-card {
-    @apply p-4 rounded-lg shadow-lg shadow-slate-400 transition lg:p-6;
+    @apply dark-page p-4 rounded-lg shadow-lg shadow-slate-400 transition lg:p-6;
 }
 
 /* .primary-blue {

@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-from .views import HomePageView, SignupView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView
+from .views import HomePageView, SignupView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView
 
 app_name = "tracker"
 
@@ -11,6 +11,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("dashboard/", DashboardView.as_view(), name="dashboard"),
     path("users/", UserListView.as_view(), name="users-list"),
+    path("users/<int:pk>/edit/", UserUpdateView.as_view(), name="edit-profile"),
     path("users/<int:pk>/", UserDetailView.as_view(), name="user-detail"),
     path("moves/", MoveListView.as_view(), name="moves-list"),
     path("moves/<int:pk>/", MoveDetailView.as_view(), name="move-detail"),
