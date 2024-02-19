@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-from .views import HomePageView, SignupView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView
+from .views import HomePageView, SignupView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView
 
 app_name = "tracker"
 
@@ -20,5 +20,6 @@ urlpatterns = [
     path("parcels/<int:pk>/", ParcelDetailView.as_view(), name="parcel-detail"),
     path("parcels/new/", ParcelCreateView.as_view(), name="parcel-create"),
     path("parcels/<int:pk>/edit/", ParcelUpdateView.as_view(), name="parcel-update"),
-    path("parcels/<int:pk>/delete/", ParcelDeleteView.as_view(), name="parcel-delete")
+    path("parcels/<int:pk>/delete/", ParcelDeleteView.as_view(), name="parcel-delete"),
+    path("parcels/scan/", ParcelScanView.as_view(), name="parcel-scan")
 ]

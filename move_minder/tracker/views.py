@@ -109,3 +109,6 @@ class ParcelUpdateView(UpdateView, LoginRequiredMixin):
 class ParcelDeleteView(DeleteView, LoginRequiredMixin):
     model = Parcel
     success_url = reverse_lazy("move-detail")
+
+class ParcelScanView(TemplateView, LoginRequiredMixin):
+    template_name="tracker/parcel-scan.html"

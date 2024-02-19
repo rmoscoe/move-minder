@@ -1,16 +1,51 @@
 <!DOCTYPE html>
 
-<header class="light-page cursor-pointer flex flex-nowrap items-center justify-between fixed top-0 left-0 right-0 z-30">
-    <section class="flex flex-nowrap items-center justify-between space-x-6 px-4 md:px-6 xl:px-8">
-        <button id="nav-burger" class="md:hidden">
+<header class="light-page cursor-pointer flex flex-nowrap items-center justify-between fixed top-0 left-0 right-0 z-30 px-2">
+    <section class="flex flex-nowrap items-center justify-between space-x-6 px-2">
+        <button id="nav-burger" class="lg:hidden">
             <h2>
                 <i class="fa-solid fa-bars"></i>
             </h2>
         </button>
         <a class="flex flex-nowrap items-center justify-between space-x-3" href="{% if user.logged_in %}/dashboard/{% else %}/{% endif %}">
-            <img src="/static/tracker/box-house.jpg" alt="Logo: a box with open flaps forming the shape of a house" class="size-8 sm:size-10 md:size-14 lg:size-20 xl:size-24" />
+            <img src="/static/tracker/box-house.png" alt="Logo: a box with open flaps forming the shape of a house" class="size-8 sm:size-10 md:size-14 lg:size-20 xl:size-24" />
             <h1>MoveMinder</h1>
         </a>
     </section>
-    <nav class="hidden md:flex"></nav>
+    <nav class="hidden lg:flex lg:flex-nowrap text-lg text-slate-900 dark:text-slate-200 md:justify-around lg:items-end space-x-4 xl:space-x-5">
+        <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/dashboard/">Dashboard</a>
+        <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/moves/">My Moves</a>
+        <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/moves/new/">Create New Move</a>
+        <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/parcels/scan/">Scan Parcels</a>
+    </nav>
+    <section class="flex flex-no-wrap justify-between space-x-2 md:space-x-4 text-3xl px-2">
+        <button id="theme-toggler">
+            <i class="fa-regular fa-moon text-slate-800 dark:hidden hover:text-slate-700"></i>
+            <i class="fa-solid fa-sun text-yellow-300 hidden dark:block hover:text-amber-300"></i>
+        </button>
+        <button id="account-menu">
+            <i class="fa-regular fa-user text-slate-800 dark:text-slate-200 hover:text-slate-700 dark:hover:text-white"></i>
+        </button>
+    </section>
 </header>
+
+<div id="sidebar-overlay" class="hidden w-screen h-screen bg-slate-900/30 dark:bg-slate-100/30 fixed top-0 left-0 right-0 z-40 backdrop-blur-sm"></div>
+
+<aside id="hamburger-menu" class="py-6 fixed -left-3/5 sm:-left-1/2 md:-left-2/5 top-0 left-0 h-screen w-3/5 sm:w-1/2 md:w-2/5 dark-box dark:light-box z-50 px-2 md:px-4">
+    <div>
+        <button id="close-burger cursor-pointer" class="w-full py-2 flex flex-nowrap justify-between items-center text-base sm:text-lg md:text-xl hover:text-white hover:bg-slate-700 dark:focus:text-slate-800 dark:focus:bg-slate-300">
+            <div class="space-x-2 flex flex-nowrap">
+                <img src="/static/tracker/box-house.png" alt="Logo: a box with open flaps forming the shape of a house" class="size-4 sm:size-5 md:size-7" />
+                <span>MoveMinder</span>
+            </div>
+            <i class="fa-regular fa-circle-left"></i>
+        </button>
+        <hr class="mb-2"/>
+    </div>
+    <div class="pl-4">
+        <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/dashboard/">Dashboard</a>
+        <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/moves/">My Moves</a>
+        <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/moves/new/">Create New Move</a>
+        <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/parcels/scan/">Scan Parcels</a>
+    </div>
+</aside>
