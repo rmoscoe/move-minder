@@ -1,6 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.sites.requests import RequestSite
+from django.contrib.sites.models import Site
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -12,9 +15,28 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import ParcelStatusForm
 from .models import Move, Parcel
 from phonenumber_field.formfields import PhoneNumberField
+from move_minder.sitemaps import StaticViewSitemap
 
 # Create your views here.
-class HomePageView(TemplateView):
+class SitemapMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        request_site = RequestSite(self.request)
+
+        try:
+            current_site = Site.objects.get_current(request_site)
+        except ImproperlyConfigured:
+            current_site = None
+
+        context['current_site'] = current_site
+        sitemap = StaticViewSitemap(request_site=request_site, current_site=current_site)
+        context['sitemap'] = sitemap.get_urls()
+
+        for url in context['sitemap']:
+            url['name'] = " ".join(url['item'].split(":")[-1].split("-")).title()
+        return context
+
+class HomePageView(SitemapMixin, TemplateView):
     template_name = "tracker/home.html"
 
     """
@@ -24,7 +46,7 @@ class HomePageView(TemplateView):
         return context
     """
 
-class SignupView(CreateView):
+class SignupView(SitemapMixin, CreateView):
     model = User
     template_name = "tracker/signup.html"
     first_name = forms.CharField(max_length=40)
@@ -34,22 +56,22 @@ class SignupView(CreateView):
     success_url = reverse_lazy('sign-up')
     fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
 
-class UserUpdateView(UpdateView, LoginRequiredMixin):
+class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = User
     fields = ["first_name", "last_name", "username", "password1", "password2", "email", "phone"]
 
-class DashboardView(TemplateView, LoginRequiredMixin):
+class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name = "tracker/dashboard.html"
 
-class UserListView(ListView, LoginRequiredMixin):
+class UserListView(SitemapMixin, LoginRequiredMixin, ListView):
     model = User
     paginate_by = 50
     context_object_name = "users"
 
-class UserDetailView(DetailView, LoginRequiredMixin):
+class UserDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = User
 
-class MoveListView(ListView, LoginRequiredMixin):
+class MoveListView(SitemapMixin, LoginRequiredMixin, ListView):
     paginate_by = 10
     context_object_name = "moves"
 
@@ -57,7 +79,7 @@ class MoveListView(ListView, LoginRequiredMixin):
         user_id = self.request.user.id
         return Move.objects.filter(Q(primary_user=user_id) | Q(secondary_users__contains=user_id))
 
-class MoveDetailView(DetailView, LoginRequiredMixin):
+class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = Move
 
     def get_context_data(self, **kwargs):
@@ -70,19 +92,19 @@ class MoveDetailView(DetailView, LoginRequiredMixin):
 
         return context
 
-class MoveCreateView(CreateView, LoginRequiredMixin):
+class MoveCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
     model = Move
     fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
 
-class MoveUpdateView(UpdateView, LoginRequiredMixin):
+class MoveUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Move
     fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
 
-class MoveDeleteView(DeleteView, LoginRequiredMixin):
+class MoveDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Move
     success_url = reverse_lazy("moves-list")
 
-class ParcelDetailView(DetailView, LoginRequiredMixin):
+class ParcelDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = Parcel
 
     def get_context_data(self, **kwargs):
@@ -90,11 +112,11 @@ class ParcelDetailView(DetailView, LoginRequiredMixin):
         context["form"] = ParcelStatusForm()
         return context
 
-class ParcelCreateView(CreateView, LoginRequiredMixin):
+class ParcelCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
     model = Parcel
     fields = ["type", "room", "contents", "photo", "weight"]
 
-class ParcelStatusUpdateView(SingleObjectMixin, FormView, LoginRequiredMixin):
+class ParcelStatusUpdateView(SitemapMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
     template_name = "tracker/parcel_detail.html"
     form_class = ParcelStatusForm
     model = Parcel
@@ -106,13 +128,13 @@ class ParcelStatusUpdateView(SingleObjectMixin, FormView, LoginRequiredMixin):
     def get_success_url(self):
         return reverse("parcel-detail", kwargs={"pk": self.object.pk})
 
-class ParcelUpdateView(UpdateView, LoginRequiredMixin):
+class ParcelUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Parcel
     fields = ["type", "room", "contents", "photo", "weight", "status"]
 
-class ParcelDeleteView(DeleteView, LoginRequiredMixin):
+class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Parcel
     success_url = reverse_lazy("move-detail")
 
-class ParcelScanView(TemplateView, LoginRequiredMixin):
+class ParcelScanView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name="tracker/parcel-scan.html"

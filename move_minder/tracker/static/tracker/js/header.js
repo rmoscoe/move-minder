@@ -6,21 +6,32 @@ const overlay = document.getElementById("sidebar-overlay");
 const hamburgerMenu = document.getElementById("hamburger-menu");
 const closeBurger = document.getElementById("close-burger");
 
-hamburger.addEventListener("click", () => {
+hamburger?.addEventListener("click", () => {
     overlay.classList.remove("hidden");
     hamburgerMenu.classList.add("active");
 });
 
-accountMenuButton.addEventListener("click", () => {
+themeToggler.addEventListener("click", () => {
+    console.log("changing theme")
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        localStorage.theme = "light";
+        document.documentElement.classList.remove("dark");
+    } else {
+        localStorage.theme = "dark";
+        document.documentElement.classList.add("dark");
+    }
+});
+
+accountMenuButton?.addEventListener("click", () => {
     accountMenu.classList.toggle("hidden");
 });
 
-overlay.addEventListener("click", () => {
+overlay?.addEventListener("click", () => {
     hamburgerMenu.classList.remove("active");
     overlay.classList.add("hidden");
 });
 
-closeBurger.addEventListener("click", () => {
+closeBurger?.addEventListener("click", () => {
     overlay.classList.add("hidden");
     hamburgerMenu.classList.remove("active");
 })

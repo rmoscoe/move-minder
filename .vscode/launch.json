@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python: Django Tailwind",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/move_minder/manage.py",
+            "args": [
+                "tailwind",
+                "start"
+            ],
+            "django": true,
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/move_minder/manage.py",
+            "args": [
+                "runserver"
+            ],
+            "django": true,
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Django SHELL",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/move_minder/manage.py",
+            "args": [
+                "shell"
+            ],
+            "django": true,
+            "justMyCode": true
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Python: Django FULL APPLICATION",
+            "configurations": ["Python: Django Tailwind", "Python: Django"],
+            "stopAll": true
+        }
+    ]
+}

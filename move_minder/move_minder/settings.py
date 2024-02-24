@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'phonenumber_field',
     'tailwind',
     'tracker',
@@ -180,3 +181,7 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Sites
+SITE_ID = 1
+DOMAIN = os.environ.get('DOMAIN')
