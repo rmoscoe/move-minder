@@ -80,8 +80,6 @@ state_or_province_to_abbrev = {
 
 class UserProfile(Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=40, help_text="Enter your first name.")
-    last_name = models.CharField(max_length=40, help_text="Enter your last name.")
     phone = PhoneNumberField()
     created = models.DateTimeField(auto_now_add=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True)

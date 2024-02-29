@@ -28,8 +28,10 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         {%include "./components/header.html" %}
-        {% block main %}
-        {% endblock %}
+        <main class="mt-10 sm:mt-12 md:mt-16 lg:mt-[88px] xl:mt-[104px]">
+            {% block main %}
+            {% endblock %}
+        </main>
         {%include "./components/footer.html" %}
         <script src="" async defer></script>
     </body>

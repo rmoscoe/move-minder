@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+
+{% block title %}Sign Up | {% endblock %}
+
+{% block main %}
+    <div class="my-2 sm:my-3 md:mx-auto md:my-8 md:p-8 lg:p-12 xl:p-16 w-full">
+        <form method="post" class="my-2 sm:my-3 mx-0 md:mx-auto md:my-8 rounded-md lg:rounded-lg box p-4 md:p-8 lg:p-12 xl:p-16 w-full md:w-4/5 lg:w-2/3 xl:w-1/2 box-border space-y-4 lg:space-y-6">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <div class="pt-3">
+                <input type="submit" value="Submit" class="ml-auto btn primary" />
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const setDivWidth = () => {
+            const form = document.querySelector("form");
+            const formDivs = form.querySelectorAll("div");
+
+            let setWidth = 0;
+            formDivs.forEach(div => {
+                div.classList.remove("block");
+                div.classList.add("inline-block");
+                div.removeAttribute("style");
+                const maxWidth = Math.max(setWidth, div.clientWidth);
+                const offset = div.offsetWidth;
+                const margin = offset - div.clientWidth;
+                const divParent = div.parentElement;
+                setWidth = Math.min(divParent.clientWidth - margin, maxWidth)
+            });
+
+            formDivs.forEach(div => {
+                div.style.width = setWidth + "px";
+                div.classList.remove("inline-block");
+                div.classList.add("block");
+            });
+        }
+
+        window.onload = () => {
+            setDivWidth();
+            const formDivs = document.querySelectorAll("form > div");
+            formDivs.forEach(div => {
+                const label = div.querySelector("label");
+                const input = div.querySelector("input");
+                if (input.hasAttribute("required")) {
+                    label.classList.add("font-bold");
+                    const labelText = label.innerText;
+                    let newLabel = "";
+                    for (let i = 0; i < labelText.length - 1; i++) {
+                        newLabel += labelText[i];
+                    }
+                    newLabel += "*:";
+                    label.innerText = newLabel;
+                }
+            });
+        }
+        window.addEventListener("resize", () => setDivWidth());
+    </script>
+{% endblock %}

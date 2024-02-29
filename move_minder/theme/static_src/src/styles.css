@@ -103,11 +103,16 @@ h6 {
 }
 
 input, select, textarea {
-    @apply rounded-lg border border-slate-400 placeholder-slate-400 disabled:bg-slate-300 dark:disabled:bg-slate-600 focus:border-blue-600 dark:focus:border-blue-700 invalid:border-red-500 dark:invalid:border-red-600 disabled:pointer-events-none disabled:cursor-not-allowed;
+    @apply static rounded-lg border border-slate-400 placeholder-slate-400 disabled:bg-slate-300 dark:disabled:bg-slate-600 focus:ring-blue-600 dark:focus:ring-violet-500 invalid:ring-red-500 dark:invalid:ring-red-600 disabled:pointer-events-none disabled:cursor-not-allowed bg-white dark:bg-slate-900 w-full;
 }
 
+input[required], textarea[required], select[required] {
+    @apply border-slate-400 dark:border-slate-500;
+}
+
+
 input, textarea {
-    @apply cursor-text focus:caret-blue-600 dark:focus:caret-blue-700 invalid:caret-red-500 dark:invalid:caret-red-600;
+    @apply cursor-text focus:caret-blue-600 dark:focus:caret-violet-500 invalid:caret-red-500 dark:invalid:caret-red-600;
 }
 
 select {
@@ -133,4 +138,16 @@ option {
 
 #hamburger-menu.active {
     @apply left-0;
+}
+
+label {
+    @apply text-xs md:text-sm block;
+}
+
+form > div {
+    @apply mx-auto inline-block static;
+}
+
+form > div > div {
+    @apply static ml-2 md:ml-3 xl:ml-4 text-blue-600 dark:text-violet-500 flex flex-wrap;
 }

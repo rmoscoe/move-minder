@@ -12,8 +12,8 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .forms import ParcelStatusForm
-from .models import Move, Parcel
+from .forms import ParcelStatusForm, SignUpForm
+from .models import Move, Parcel, UserProfile
 from phonenumber_field.formfields import PhoneNumberField
 from move_minder.sitemaps import StaticViewSitemap
 
@@ -47,18 +47,14 @@ class HomePageView(SitemapMixin, TemplateView):
     """
 
 class SignupView(SitemapMixin, CreateView):
-    model = User
+    model = UserProfile
     template_name = "tracker/signup.html"
-    first_name = forms.CharField(max_length=40)
-    last_name = forms.CharField(max_length=40)
-    phone = PhoneNumberField()
-    email = forms.EmailField()
-    success_url = reverse_lazy('sign-up')
-    fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
+    success_url = reverse_lazy('login')
+    form_class = SignUpForm
 
 class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = User
-    fields = ["first_name", "last_name", "username", "password1", "password2", "email", "phone"]
+    fields = ["first_name", "last_name", "username", "password", "password", "email", "phone"]
 
 class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name = "tracker/dashboard.html"
