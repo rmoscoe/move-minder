@@ -66,7 +66,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'move_minder.auth_header_middleware.AuthenticationHeaderMiddleware',
     'django_browser_reload.middleware.BrowserReloadMiddleware'
 ]
 
@@ -108,9 +107,9 @@ DATABASES = {
 
 # Authentication
 
-LOGIN_URL = reverse_lazy("login")
+LOGIN_URL = reverse_lazy("tracker:login")
 
-LOGIN_REDIRECT_URL = reverse_lazy("dashboard")
+LOGIN_REDIRECT_URL = reverse_lazy("tracker:dashboard")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -185,3 +184,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Sites
 SITE_ID = 1
 DOMAIN = os.environ.get('DOMAIN')
+
+#PhoneNumberField
+PHONENUMBER_DB_FORMAT = "NATIONAL"
+PHONENUMBER_DEFAULT_REGION = "US"

@@ -1,13 +1,13 @@
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 from django.urls import path
-from .views import HomePageView, SignupView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView
+from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView
 
 app_name = "tracker"
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
     path("sign-up/", SignupView.as_view(), name="sign-up"),
-    path("login/", LoginView.as_view(template_name="tracker/login.html"), name="login"),
+    path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("dashboard/", DashboardView.as_view(), name="dashboard"),
     path("users/", UserListView.as_view(), name="users-list"),

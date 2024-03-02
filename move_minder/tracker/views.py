@@ -1,21 +1,26 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import date
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.contrib.sites.requests import RequestSite
 from django.contrib.sites.models import Site
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models import Q
+from django.db.models import Q, Count
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import ParcelStatusForm, SignUpForm
+import json
 from .models import Move, Parcel, UserProfile
-from phonenumber_field.formfields import PhoneNumberField
 from move_minder.sitemaps import StaticViewSitemap
+import os
+from phonenumber_field.formfields import PhoneNumberField
 
 # Create your views here.
 class SitemapMixin:
@@ -35,6 +40,13 @@ class SitemapMixin:
         for url in context['sitemap']:
             url['name'] = " ".join(url['item'].split(":")[-1].split("-")).title()
         return context
+    
+class AnonymousUserMixin(UserPassesTestMixin):
+    def test_func(self):
+        return not self.request.user.is_authenticated
+    
+    def handle_no_permission(self):
+        return HttpResponseRedirect(reverse_lazy("tracker:dashboard"))
 
 class HomePageView(SitemapMixin, TemplateView):
     template_name = "tracker/home.html"
@@ -46,11 +58,30 @@ class HomePageView(SitemapMixin, TemplateView):
         return context
     """
 
-class SignupView(SitemapMixin, CreateView):
+class SignupView(SitemapMixin, AnonymousUserMixin, CreateView):
     model = UserProfile
     template_name = "tracker/signup.html"
     success_url = reverse_lazy('login')
     form_class = SignUpForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context.get("form")
+        if form:
+            context["form_errors"] = form.errors
+        return context
+    
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+class CustomLoginView(SitemapMixin, AnonymousUserMixin, LoginView):
+    model = UserProfile
+    template_name = "tracker/login.html"
+    success_url = reverse_lazy("tracker:dashboard")
+    form_class = AuthenticationForm
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 
 class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = User
@@ -58,6 +89,56 @@ class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
 
 class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name = "tracker/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = date.today()
+        try:
+            user_id = self.request.user.id
+            moves = Move.objects.filter(
+                Q(primary_user=user_id) | Q(secondary_users__in=[user_id]),
+            )
+
+            upcoming = moves.filter(
+                start_date__gte=today
+            ).values(
+                "id",
+                "nickname",
+                "start_date",
+                "primary_user__first_name",
+                "primary_user__last_name",
+                "origin_city",
+                "destination_city"
+            ).order_by(
+                "start_date", 
+                "origin_city", 
+                "destination_city"
+            )
+            context["moves"] = upcoming[:10]
+
+            parcels = Parcel.objects.filter(move__in=moves).annotate(
+                packed=Count("id", filter=Q(status="Packed")),
+                in_transit=Count("id", filter=Q(status="In Transit")),
+                lost=Count("id", filter=Q(status="Lost")),
+                received=Count("id", filter=Q(status="Received")),
+                damaged=Count("id", filter=Q(status="Damaged")),
+                accepted=Count("id", filter=Q(status="Accepted"))
+            ).values(
+                "packed",
+                "in_transit",
+                "lost",
+                "received",
+                "damaged",
+                "accepted"
+            )
+            context["parcels"] = parcels
+
+            recent = User.objects.filter(pk=user_id).values("user_profile__recent_pages")
+            context["recent_pages"] = recent["user_profile__recent_pages"]
+            
+        except Exception as e:
+            print(e)
+        return context
 
 class UserListView(SitemapMixin, LoginRequiredMixin, ListView):
     model = User

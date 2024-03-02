@@ -81,6 +81,7 @@ state_or_province_to_abbrev = {
 class UserProfile(Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = PhoneNumberField()
+    recent_pages = models.JSONField(blank=True, default=list)
     created = models.DateTimeField(auto_now_add=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True)
 
@@ -127,7 +128,7 @@ class Parcel(Model):
         "Storage Bin": "Storage Bin", 
         "Suitcase": "Suitcase"
     }
-    status_choices = ["Ready", "In Transit", "Lost", "Received", "Damaged", "Accepted"]
+    status_choices = ["Packed", "In Transit", "Lost", "Received", "Damaged", "Accepted"]
 
     move_id = models.ForeignKey(Move, on_delete=models.CASCADE)
     type = models.CharField(max_length=40, choices=type_choices, default="Box")

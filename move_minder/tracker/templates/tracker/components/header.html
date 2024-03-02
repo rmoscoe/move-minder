@@ -16,7 +16,7 @@
             <h1>MoveMinder</h1>
         </a>
     </section>
-    {% if user.isauthenticated %}
+    {% if user.is_authenticated %}
         <nav class="hidden lg:flex lg:flex-nowrap text-lg text-slate-900 dark:text-slate-200 md:justify-around lg:items-end space-x-4 lg:space-x-5 xl:space-x-6">
             <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/dashboard/">Dashboard</a>
             <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/moves/">My Moves</a>
@@ -44,9 +44,9 @@
 {% if user.is_authenticated %}
     <div id="sidebar-overlay" class="hidden w-screen h-screen bg-slate-900/30 dark:bg-slate-100/30 fixed top-0 left-0 right-0 z-40 backdrop-blur-sm"></div>
 
-    <aside id="hamburger-menu" class="py-6 fixed left-[-60%] sm:-left-1/2 md:left-[-40%] top-0 h-screen w-3/5 sm:w-1/2 md:w-2/5 dark-box dark:light-box z-50 px-2 md:px-4 trasition duration-200">
+    <aside id="hamburger-menu" class="py-6 fixed left-[-60%] sm:-left-1/2 md:left-[-40%] top-0 h-screen w-3/5 sm:w-1/2 md:w-2/5 box-contrast z-50 px-2 md:px-4 trasition duration-200">
         <div>
-            <button id="close-burger" class="cursor-pointer w-full py-2 flex flex-nowrap justify-between items-center text-base sm:text-lg md:text-xl hover:text-white hover:bg-slate-700 dark:focus:text-slate-800 dark:focus:bg-slate-300">
+            <button id="close-burger" class="cursor-pointer w-full py-2 flex flex-nowrap justify-between items-center text-base sm:text-lg md:text-xl hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300">
                 <div class="space-x-2 flex flex-nowrap">
                     <img src="/static/tracker/box-house.png" alt="Logo: a box with open flaps forming the shape of a house" class="size-4 sm:size-5 md:size-7" />
                     <span>MoveMinder</span>

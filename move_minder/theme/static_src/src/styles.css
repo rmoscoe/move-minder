@@ -26,12 +26,16 @@
     @apply bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300;
 }
 
+.box-contrast {
+    @apply dark:bg-slate-200 dark:text-slate-600 bg-slate-800 text-slate-300;
+}
+
 .light-card {
-    @apply page p-4 rounded-lg shadow-lg shadow-slate-700 transition lg:p-6;
+    @apply page p-4 rounded-lg shadow-lg shadow-slate-700/60 transition lg:p-6;
 }
 
 .dark-card {
-    @apply page p-4 rounded-lg shadow-lg shadow-slate-400 transition lg:p-6;
+    @apply page p-4 rounded-lg shadow-lg shadow-slate-400/60 transition lg:p-6;
 }
 
 /* .primary-blue {
@@ -103,16 +107,23 @@ h6 {
 }
 
 input, select, textarea {
-    @apply static rounded-lg border border-slate-400 placeholder-slate-400 disabled:bg-slate-300 dark:disabled:bg-slate-600 focus:ring-blue-600 dark:focus:ring-violet-500 invalid:ring-red-500 dark:invalid:ring-red-600 disabled:pointer-events-none disabled:cursor-not-allowed bg-white dark:bg-slate-900 w-full;
+    @apply static rounded-lg border border-slate-400 placeholder-slate-400 disabled:bg-slate-300 dark:disabled:bg-slate-600 focus:ring-blue-600 dark:focus:ring-violet-500 disabled:pointer-events-none disabled:cursor-not-allowed bg-white dark:bg-slate-900 w-full;
 }
 
 input[required], textarea[required], select[required] {
-    @apply border-slate-400 dark:border-slate-500;
+    @apply border-slate-400 dark:border-slate-500 focus:ring-blue-600 dark:focus:ring-violet-500 ;
 }
 
+input.invalid, textarea.invalid, select.invalid {
+    @apply border-red-500 dark:border-red-600;
+}
 
 input, textarea {
-    @apply cursor-text focus:caret-blue-600 dark:focus:caret-violet-500 invalid:caret-red-500 dark:invalid:caret-red-600;
+    @apply cursor-text focus:caret-blue-600 dark:focus:caret-violet-500;
+}
+
+input.invalid, textarea.invalid {
+    @apply caret-red-500 dark:caret-red-600;
 }
 
 select {
@@ -148,6 +159,11 @@ form > div {
     @apply mx-auto inline-block static;
 }
 
-form > div > div {
-    @apply static ml-2 md:ml-3 xl:ml-4 text-blue-600 dark:text-violet-500 flex flex-wrap;
+ul.errorlist {
+    @apply list-disc text-red-500 dark:text-red-600 text-xs md:text-sm ml-4;
+    list-style-position:inside;
+}
+
+.helptext {
+    @apply ml-2 md:ml-3 xl:ml-4 text-blue-600 dark:text-violet-500 flex-wrap;
 }
