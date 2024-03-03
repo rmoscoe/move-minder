@@ -15,7 +15,7 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .forms import ParcelStatusForm, SignUpForm
+from .forms import ParcelStatusForm, SignUpForm, UpdateUserForm, MoveForm, ParcelForm
 import json
 from .models import Move, Parcel, UserProfile
 from move_minder.sitemaps import StaticViewSitemap
@@ -86,6 +86,11 @@ class CustomLoginView(SitemapMixin, AnonymousUserMixin, LoginView):
 class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = User
     fields = ["first_name", "last_name", "username", "password", "password", "email", "phone"]
+    template_name = "tracker/user_update.html"
+    form_class = UpdateUserForm
+
+    def get_success_url(self):
+        return reverse("user-detail", kwargs={"pk": self.request.user.id})
 
 class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name = "tracker/dashboard.html"
