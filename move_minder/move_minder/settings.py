@@ -111,6 +111,8 @@ LOGIN_URL = reverse_lazy("tracker:login")
 
 LOGIN_REDIRECT_URL = reverse_lazy("tracker:dashboard")
 
+LOGOUT_REDIRECT_URL = reverse_lazy("tracker:home")
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
