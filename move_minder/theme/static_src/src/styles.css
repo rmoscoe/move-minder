@@ -167,3 +167,15 @@ ul.errorlist {
 .helptext {
     @apply ml-2 md:ml-3 xl:ml-4 text-blue-600 dark:text-violet-500 flex-wrap;
 }
+
+thead {
+    @apply box font-semibold;
+}
+
+th, td {
+    @apply sm:px-1 md:px-2 xl:px-3;
+}
+
+.apexcharts-canvas {
+    @apply bg-white dark:bg-slate-700;
+}

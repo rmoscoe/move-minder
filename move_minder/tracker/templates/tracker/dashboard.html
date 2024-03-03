@@ -10,20 +10,76 @@ Dashboard |
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Your Upcoming Moves</h3>
-            <div></div>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
+                {% if moves %}
+                    <table id="upcoming-moves-table" class="border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-fixed text-center">
+                        <thead class="bg-slate-200 dark:bg-slate-700">
+                            <tr class="p-1 sm:p-2 lg:p3">
+                                <th>Date</th>
+                                <th>Nickname</th>
+                                <th class="md:max-lg:hidden">Owner</th>
+                                <th class="hidden md:block">From</th>
+                                <th class="hidden md:block">To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for move in moves %}
+                                <tr class="hidden lg:block border border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                                    <a href="{% url 'move-detail' move.id %}" class="hover:bg:slate-100 dark:hover:bg-slate-800">
+                                        <td>{{ move.date|date:"SHORT_DATE_FORMAT" }}</td>
+                                        <td>{{ move.nickname }}</td>
+                                        <td class="md:max-lg:hidden">{{ move.primary_user__first_name }} {{ move.primary_user__last_name }}</td>
+                                        <td class="hidden md:block">{{ origin_city }}</td>
+                                        <td class="hidden md:block">{{ destination_city }}</td>
+                                    </a>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                {% else %}
+                    <div class="h-full w-full flex justify-center items-center">
+                        <p class="text-center">No upcoming moves to display</p>
+                    </div>
+                {% endif %}
+            </div>
         </section>
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Parcel Status</h3>
-            <div></div>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
+                {% if parcels %}
+                    <div id="chart" class="mx-auto"></div>
+                {% else %}
+                    <div class="h-full w-full flex justify-center items-center">
+                        <p class="text-center">No parcel data to display</p>
+                    </div>
+                {% endif %}
+            </div>
         </section>
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Quick Access</h3>
-            <div></div>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10"></div>
         </section>
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Recent</h3>
-            <div></div>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10"></div>
         </section>
     </section>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    const options = {
+        series: {{ parcels }}.values(), // use {{ parcels|safe }} if this doesn't work.
+        labels: {{ parcels }}.keys(),
+        chart: {
+            foreColor: document.classList.includes("dark") ? "#94a3b8" : "#64748b",
+            id: "parcel-chart",
+            type: "pie"
+        },
+        colors: ["#0f172a", "#8b5cf6", "#ef4444", "#2563eb", "#facc15", "#10b981"]
+    };
+
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+
+    chart.render();
+</script>
 {% endblock %}

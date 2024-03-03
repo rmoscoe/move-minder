@@ -116,7 +116,7 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
             )
             context["moves"] = upcoming[:10]
 
-            parcels = Parcel.objects.filter(move__in=moves).annotate(
+            parcels = Parcel.objects.filter(move_id__in=moves).annotate(
                 packed=Count("id", filter=Q(status="Packed")),
                 in_transit=Count("id", filter=Q(status="In Transit")),
                 lost=Count("id", filter=Q(status="Lost")),
@@ -133,8 +133,8 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
             )
             context["parcels"] = parcels
 
-            recent = User.objects.filter(pk=user_id).values("user_profile__recent_pages")
-            context["recent_pages"] = recent["user_profile__recent_pages"]
+            recent = UserProfile.objects.filter(user=user_id).values("recent_pages")
+            context["recent_pages"] = recent[:10]
             
         except Exception as e:
             print(e)
