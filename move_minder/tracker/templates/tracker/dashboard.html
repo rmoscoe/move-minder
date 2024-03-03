@@ -10,9 +10,9 @@ Dashboard |
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Your Upcoming Moves</h3>
-            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
+            <div class="h-full">
                 {% if moves %}
-                    <table id="upcoming-moves-table" class="border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-fixed text-center">
+                    <table id="upcoming-moves-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10  border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-fixed text-center">
                         <thead class="bg-slate-200 dark:bg-slate-700">
                             <tr class="p-1 sm:p-2 lg:p3">
                                 <th>Date</th>
@@ -25,7 +25,7 @@ Dashboard |
                         <tbody>
                             {% for move in moves %}
                                 <tr class="hidden lg:block border border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
-                                    <a href="{% url 'move-detail' move.id %}" class="hover:bg:slate-100 dark:hover:bg-slate-800">
+                                    <a href="{% url 'tracker:move-detail' move.id %}" class="hover:bg:slate-100 dark:hover:bg-slate-800">
                                         <td>{{ move.date|date:"SHORT_DATE_FORMAT" }}</td>
                                         <td>{{ move.nickname }}</td>
                                         <td class="md:max-lg:hidden">{{ move.primary_user__first_name }} {{ move.primary_user__last_name }}</td>
@@ -37,7 +37,7 @@ Dashboard |
                         </tbody>
                     </table> 
                 {% else %}
-                    <div class="h-full w-full flex justify-center items-center">
+                    <div class="h-full w-full flex justify-center items-center pb-4 lg:pb-6">
                         <p class="text-center">No upcoming moves to display</p>
                     </div>
                 {% endif %}
@@ -45,11 +45,11 @@ Dashboard |
         </section>
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Parcel Status</h3>
-            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
+            <div class="h-full">
                 {% if parcels %}
-                    <div id="chart" class="mx-auto"></div>
+                    <div id="chart" class="mx-auto pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10 "></div>
                 {% else %}
-                    <div class="h-full w-full flex justify-center items-center">
+                    <div class="h-full w-full flex justify-center items-center pb-4 lg:pb-6">
                         <p class="text-center">No parcel data to display</p>
                     </div>
                 {% endif %}
@@ -57,11 +57,62 @@ Dashboard |
         </section>
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Quick Access</h3>
-            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10"></div>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10 grid grid-cols-3 md:max-lg:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+                <a class="light-card dark:dark-card hover:bg-slate-100 dark:hover:bg-slate-800 flex flex-nowrap items-center p-1 md:p-2 xl:p-3" href="{% url 'tracker:parcel-scan' %}">
+                    <div class="size-10 md:size-11 xl:size-12 rounded-full bg-red-500/80 p-1 md:p-2 xl:p-3 text-slate-200 md:text-lg text-center flex justify-center items-center flex-none">
+                        <i class="fa-solid fa-qrcode mx-auto"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold mb-1">Scan</p>
+                        <p class="text-xs">Scan parcels to update status</p>
+                    </div>
+                </a>
+                <a class="light-card dark:dark-card hover:bg-slate-100 dark:hover:bg-slate-800 flex flex-nowrap items-center p-1 md:p-2 xl:p-3" href="{% url 'tracker:moves-list' %}">
+                    <div class="size-10 md:size-11 xl:size-12 rounded-full bg-blue-600/80 p-1 md:p-2 xl:p-3 text-slate-200 md:text-lg text-center flex justify-center items-center flex-none">
+                        <i class="fa-solid fa-route mx-auto"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold mb-1">Moves</p>
+                        <p class="text-xs">Manage your moves</p>
+                    </div>
+                </a>
+                <a class="light-card dark:dark-card hover:bg-slate-100 dark:hover:bg-slate-800 flex flex-nowrap items-center p-1 md:p-2 xl:p-3" href="{% url 'tracker:move-create' %}">
+                    <div class="size-10 md:size-11 xl:size-12 rounded-full bg-violet-500/80 p-1 md:p-2 xl:p-3 text-slate-200 md:text-lg text-center flex justify-center items-center flex-none">
+                        <i class="fa-solid fa-truck mx-auto"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold mb-1">New Move</p>
+                        <p class="text-xs">Create a new move</p>
+                    </div>
+                </a>
+                <a class="light-card dark:dark-card hover:bg-slate-100 dark:hover:bg-slate-800 flex flex-nowrap items-center p-1 md:p-2 xl:p-3" href="{% url 'tracker:edit-profile' user.id %}">
+                    <div class="size-10 md:size-11 xl:size-12 rounded-full bg-amber-400/80 p-1 md:p-2 xl:p-3 text-slate-200 md:text-lg text-center flex justify-center items-center flex-none">
+                        <i class="fa-solid fa-user mx-auto"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="font-semibold mb-1">Edit Profile</p>
+                        <p class="text-xs">Edit your profile or change your password</p>
+                    </div>
+                </a>
+            </div>
         </section>
         <section class="light-card dark:dark-card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Recent</h3>
-            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10"></div>
+            <div class="h-full">
+                {% if recent_pages %}
+                    <ul class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10 list-none space-y-3 w-full divide-y divide-slate-400 dark:divide-slate-500">
+                        {% for page in recent_pages %}
+                            <li>
+                                <a href="{{ page.url }}" class="w-full hover:bg-slate-100 dark:hover:bg-slate-800">{{ page.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="w-full flex justify-center items-center h-full pb-4 lg:pb-6">
+                        <p class="text-center">No upcoming moves to display</p>
+                    </div>
+                {% endif %}
+            </div>
         </section>
     </section>
 </div>
