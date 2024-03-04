@@ -45,22 +45,16 @@ class UpdateUserForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ["username", "password1", "password2", "first_name", "last_name", "email"]
+        fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
 
         def __init__(self, *args, **kwargs):
-            self.user = kwargs.pop("instance", None)
+            self.user = kwargs.get("instance", None)
             super().__init__(*args, **kwargs)
 
             self.fields["username"].initial = self.user.username
             self.fields["first_name"].initial = self.user.first_name
             self.fields["last_name"].initial = self.user.last_name
             self.fields["email"].initial = self.user.email
-
-            self.fields["phone"] = PhoneNumberField(
-                label="Phone Number",
-                initial=self.user.userprofile.phone,
-                required=False
-            )
 
         def clean_password2(self):
             password1 = self.cleaned_data.get("password1")
@@ -69,24 +63,29 @@ class UpdateUserForm(ModelForm):
                 raise ValidationError("Passwords don't match")
             return password2
         
-        def save(self, commit=True):
-            user = super().save(commit=False)
-            password = self.cleaned_data.get("password1")
-            if password:
-                user.set_password(password)
-            user.username = self.cleaned_data["username"]
-            user.first_name = self.cleaned_data["first_name"]
-            user.last_name = self.cleaned_data["last_name"]
-            user.email = self.cleaned_data["email"]
-            if commit:
-                user.save()
+        # def save(self, commit=True):
+        #     user = super().save(commit=False)
+        #     print(user)
+        #     print(f"Cleaned Data: {self.cleaned_data}")
+        #     phone = self.cleaned_data.get("phone")
+        #     print(f"Phone: {phone}")
+        #     if phone:
+        #         user_profile = UserProfile.objects.get(user=user)
+        #         user_profile.phone = phone
+        #         print(f"User Profile Phone: {user_profile.phone}")
+        #         user_profile.save(commit=True)
+        #         print(f"Saved User Profile Phone: {user_profile.phone}")
+        #     password = self.cleaned_data.get("password1")
+        #     if password:
+        #         user.set_password(password)
+        #     user.username = self.cleaned_data["username"]
+        #     user.first_name = self.cleaned_data["first_name"]
+        #     user.last_name = self.cleaned_data["last_name"]
+        #     user.email = self.cleaned_data["email"]
+        #     if commit:
+        #         user.save()
             
-            phone = self.cleaned_data.get("phone")
-            if phone:
-                user.userprofile.phone = phone
-                user.userprofile.save()
-
-            return user
+        #     return user
 
 class MoveForm(ModelForm):
     class Meta:

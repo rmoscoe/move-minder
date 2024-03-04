@@ -85,6 +85,7 @@ class UserProfile(Model):
     created = models.DateTimeField(auto_now_add=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True)
 
+
 class Move(Model):
     nickname = models.CharField(max_length=80)
     primary_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

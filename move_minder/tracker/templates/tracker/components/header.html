@@ -35,7 +35,7 @@
             </button>
             <div id="account-menu-content" class="hidden absolute right-0 top-full light-card space-y-3 md:space-y-4 xl:space-y-5 min-w-max text-center dark:dark-card">
                 <a class="block w-full hover:text-slate-400 hover:underline dark:hover:text-slate-200" href="/users/{{ user.id }}/edit/">My Profile</a>
-                <form id="logout-form" method="POST" action="{% url 'tracker:logout' %}">
+                <form id="logout-form" method="post" action="{% url 'tracker:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="block w-full hover:text-slate-400 hover:underline dark:hover:text-slate-200">Logout</button>
                 </form>

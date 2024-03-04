@@ -71,6 +71,12 @@ class SignupView(SitemapMixin, AnonymousUserMixin, CreateView):
             context["form_errors"] = form.errors
         return context
     
+    def form_valid(self, form):
+        user = form.save()
+        phone = form.cleaned_data["phone"]
+        UserProfile.objects.create(user=user, phone=phone)
+        return super().form_valid(form)
+    
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -85,12 +91,35 @@ class CustomLoginView(SitemapMixin, AnonymousUserMixin, LoginView):
 
 class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = User
-    fields = ["first_name", "last_name", "username", "password", "password", "email", "phone"]
     template_name = "tracker/user_update.html"
     form_class = UpdateUserForm
 
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.get_object()
+        profile = UserProfile.objects.get(user=user)
+        initial["phone"] = profile.phone
+        return initial
+
     def get_success_url(self):
-        return reverse("user-detail", kwargs={"pk": self.request.user.id})
+        return reverse("tracker:user-detail", kwargs={"pk": self.request.user.id})
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        history.insert(0, { "name": "Edit Profile", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        user = form.save()
+        phone = form.cleaned_data["phone"]
+        UserProfile.objects.filter(user=user).update(phone=phone)
+        return super().form_valid(form)
 
 class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name = "tracker/dashboard.html"
@@ -153,6 +182,7 @@ class UserListView(SitemapMixin, LoginRequiredMixin, ListView):
 
 class UserDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = User
+    template_name = "tracker/user_detail.html"
 
 class MoveListView(SitemapMixin, LoginRequiredMixin, ListView):
     paginate_by = 10

@@ -2,6 +2,7 @@ const setDivWidth = () => {
     const form = document.querySelector("form");
     const formDivs = form.querySelectorAll("div");
 
+
     let setWidth = 0;
     formDivs.forEach(div => {
         div.classList.remove("block");
