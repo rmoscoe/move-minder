@@ -139,7 +139,8 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
             context["parcels"] = parcels
 
             recent = UserProfile.objects.filter(user=user_id).values("recent_pages")
-            context["recent_pages"] = recent[:10]
+            recent_pages = list(recent)[0]["recent_pages"][:10]
+            context["recent_pages"] = recent_pages
             
         except Exception as e:
             print(e)
@@ -159,7 +160,18 @@ class MoveListView(SitemapMixin, LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user_id = self.request.user.id
-        return Move.objects.filter(Q(primary_user=user_id) | Q(secondary_users__contains=user_id))
+        return Move.objects.filter(Q(primary_user=user_id) | Q(secondary_users__in=[user_id]))
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        history.insert(0, { "name": "My Moves", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
 
 class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = Move

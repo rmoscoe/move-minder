@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Moves | 
+{% endblock %}
+
+{% block main %}
+<div class="px-4 lg:px-8 py-4 md:py-6 xl:py-8">
+    <section class="flex flex-wrap justify-between content-between sm:content-end gap-3 md:gap-4 lg:gap-6 mb-8 md:mb-12 lg:mb-16 xl:mb-20">
+        <h2>My Moves</h2>
+        <a class="btn cool max-sm:w-full mt-4 sm:mt-0 sm:ml-4 dark:bg-violet-700" href="{% url 'tracker:move-create' %}">
+            <span class="hidden sm:max-md:inline">New Move</span>
+            <span class="sm:max-md:hidden">Create New Move</span>
+        </a>
+    </section>
+    {% if moves %}
+    <table id="moves-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10  border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-fixed text-center">
+        <thead class="bg-slate-200 dark:bg-slate-700">
+            <tr class="p-1 sm:p-2 lg:p3">
+                <th>Start<span class="max-md:hidden">&nbsp; Date</span></th>
+                <th class="max-md:hidden">End<span class="max-md:hidden">&nbsp; Date</span></th>
+                <th>Nickname</th>
+                <th>Owner</th>
+                <th class="max-lg:hidden">Additional Users</th>
+                <th class="hidden md:block">From</th>
+                <th class="hidden md:block">To</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for move in moves %}
+                <tr class="hidden lg:block border border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                    <a href="{% url 'tracker:move-detail' move.id %}" class="hover:bg:slate-100 dark:hover:bg-slate-800">
+                        <td>{{ move.start_date|date:"SHORT_DATE_FORMAT" }}</td>
+                        <td>{{ move.end_date|date:"SHORT_DATE_FORMAT" }}</td>
+                        <td>{{ move.nickname }}</td>
+                        <td>{{ move.primary_user__first_name }} {{ move.primary_user__last_name }}</td>
+                        <td class="max-lg:hidden">
+                            <ul class="list-disc">
+                            {% for user in move.secondary_users %}
+                                <li>{{ user.first_name }} {{ user.last_name }}</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        <td class="hidden md:block">{{ origin_city }}<span class="hidden lg:inline">, {{ move.origin_state_province }}</span></td>
+                        <td class="hidden md:block">{{ destination_city }}<span class="hidden lg:inline">, {{ move.destination_state_province }}</span></td>
+                    </a>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+{% else %}
+    <div class="h-full w-full flex justify-center items-center pb-4 lg:pb-6">
+        <p class="text-center">You have no moves to display</p>
+    </div>
+{% endif %}
+<div>
+{% endblock %}

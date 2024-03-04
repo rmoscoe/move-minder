@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 import json
 from .models import Parcel, UserProfile, Move
@@ -38,15 +39,59 @@ class SignUpForm(UserCreationForm):
         return valid
 
 class UpdateUserForm(ModelForm):
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=False)
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput, required=False)
     phone = PhoneNumberField()
 
     class Meta:
         model = User
-        fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
+        fields = ["username", "password1", "password2", "first_name", "last_name", "email"]
+
+        def __init__(self, *args, **kwargs):
+            self.user = kwargs.pop("instance", None)
+            super().__init__(*args, **kwargs)
+
+            self.fields["username"].initial = self.user.username
+            self.fields["first_name"].initial = self.user.first_name
+            self.fields["last_name"].initial = self.user.last_name
+            self.fields["email"].initial = self.user.email
+
+            self.fields["phone"] = PhoneNumberField(
+                label="Phone Number",
+                initial=self.user.userprofile.phone,
+                required=False
+            )
+
+        def clean_password2(self):
+            password1 = self.cleaned_data.get("password1")
+            password2 = self.cleaned_data.get("password2")
+            if password1 and password2 and password1 != password2:
+                raise ValidationError("Passwords don't match")
+            return password2
+        
+        def save(self, commit=True):
+            user = super().save(commit=False)
+            password = self.cleaned_data.get("password1")
+            if password:
+                user.set_password(password)
+            user.username = self.cleaned_data["username"]
+            user.first_name = self.cleaned_data["first_name"]
+            user.last_name = self.cleaned_data["last_name"]
+            user.email = self.cleaned_data["email"]
+            if commit:
+                user.save()
+            
+            phone = self.cleaned_data.get("phone")
+            if phone:
+                user.userprofile.phone = phone
+                user.userprofile.save()
+
+            return user
 
 class MoveForm(ModelForm):
     class Meta:
         model = Move
+        fields = ["nickname", "primary_user", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
         field_groups = [
             ("Properties", ["nickname", "primary_user", "secondary_users", "start_date", "end_date"]),
             ("Origin", ["origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country"]),

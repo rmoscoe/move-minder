@@ -103,7 +103,11 @@ h6 {
 }
 
 .btn.primary {
-    @apply bg-slate-950 text-slate-200 dark:bg-black dark:border-slate-300 hover:bg-slate-800 focus:border-slate-300 disabled:bg-slate-400 dark:text-slate-300 dark:hover:bg-slate-700 dark:focus:border-slate-400 dark:disabled:bg-slate-700;
+    @apply bg-slate-950 text-slate-200 dark:bg-black dark:border-slate-300 hover:bg-slate-800 focus:border-slate-300 disabled:bg-slate-400 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus:border-slate-400 dark:disabled:bg-slate-700;
+}
+
+.btn.cool {
+    @apply bg-slate-950 text-slate-200 dark:bg-blue-800 dark:border-slate-300 hover:bg-slate-700 focus:border-slate-300 disabled:bg-slate-400 dark:text-slate-300 dark:hover:bg-blue-700 dark:focus:border-slate-400 dark:disabled:bg-slate-700;
 }
 
 input, select, textarea {
