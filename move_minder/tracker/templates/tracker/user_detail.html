@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+{% load static phone %}
+
+{% block title %}
+My Profile | 
+{% endblock %}
+
+{% block main %}
+<div class="my-2 sm:my-3 md:mx-auto md:my-8 md:p-8 lg:p-12 xl:p-16 w-full">
+    <section class="box w-max mx-auto p-2 sm:p-3 md:p-4 lg:p-6 xl:p-7 2xl:p-8">
+        <h2 class="w-full text-center">My Profile</h2>
+        <section class="mt-3 sm:mt-4 md:mt-6 lg:mt-8 xl:mt-9 2xl:mt-10 grid grid-cols-2">
+            <p class="font-semibold p-2 md:p-3 xl:p-4">Username:</p>
+            <p class="p-2 md:p-3 xl:p-4">{{ user.username }}</p>
+            <p class="font-semibold p-2 md:p-3 xl:p-4">First Name:</p>
+            <p class="p-2 md:p-3 xl:p-4">{{ user.first_name }}</p>
+            <p class="font-semibold p-2 md:p-3 xl:p-4">Last Name:</p>
+            <p class="p-2 md:p-3 xl:p-4">{{ user.last_name }}</p>
+            <p class="font-semibold p-2 md:p-3 xl:p-4">Email:</p>
+            <p class="p-2 md:p-3 xl:p-4">{{ user.email }}</p>
+            <p class="font-semibold p-2 md:p-3 xl:p-4">Phone:</p>
+            <p class="p-2 md:p-3 xl:p-4">{{ user.userprofile.phone|phone }}</p>
+        </section>
+    </section>
+</div>
+{% endblock %}

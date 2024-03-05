@@ -62,30 +62,6 @@ class UpdateUserForm(ModelForm):
             if password1 and password2 and password1 != password2:
                 raise ValidationError("Passwords don't match")
             return password2
-        
-        # def save(self, commit=True):
-        #     user = super().save(commit=False)
-        #     print(user)
-        #     print(f"Cleaned Data: {self.cleaned_data}")
-        #     phone = self.cleaned_data.get("phone")
-        #     print(f"Phone: {phone}")
-        #     if phone:
-        #         user_profile = UserProfile.objects.get(user=user)
-        #         user_profile.phone = phone
-        #         print(f"User Profile Phone: {user_profile.phone}")
-        #         user_profile.save(commit=True)
-        #         print(f"Saved User Profile Phone: {user_profile.phone}")
-        #     password = self.cleaned_data.get("password1")
-        #     if password:
-        #         user.set_password(password)
-        #     user.username = self.cleaned_data["username"]
-        #     user.first_name = self.cleaned_data["first_name"]
-        #     user.last_name = self.cleaned_data["last_name"]
-        #     user.email = self.cleaned_data["email"]
-        #     if commit:
-        #         user.save()
-            
-        #     return user
 
 class MoveForm(ModelForm):
     class Meta:

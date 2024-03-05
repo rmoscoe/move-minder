@@ -108,6 +108,10 @@ class UserUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
         url = request.path
         user = User.objects.select_related("userprofile").get(id=request.user.id)
         history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == "Edit Profile":
+                history.pop(i)
+                break
         history.insert(0, { "name": "Edit Profile", "url": url })
         while len(history) > 10:
             history.pop()
@@ -184,6 +188,12 @@ class UserDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = User
     template_name = "tracker/user_detail.html"
 
+    def get_queryset(self):
+        path = self.request.path_info.split("/")
+        user_id = path[2]
+        qs = User.objects.select_related("userprofile").filter(pk=user_id)
+        return qs
+
 class MoveListView(SitemapMixin, LoginRequiredMixin, ListView):
     paginate_by = 10
     context_object_name = "moves"
@@ -196,6 +206,10 @@ class MoveListView(SitemapMixin, LoginRequiredMixin, ListView):
         url = request.path
         user = User.objects.select_related("userprofile").get(id=request.user.id)
         history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == "My Moves":
+                history.pop(i)
+                break
         history.insert(0, { "name": "My Moves", "url": url })
         while len(history) > 10:
             history.pop()
@@ -207,8 +221,6 @@ class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = Move
 
     def get_context_data(self, **kwargs):
-        # path_list = self.request.path.split("/")
-        # move_id = path_list[2]
         move_id = get_object_or_404(Move, pk=self.kwargs["pk"])
 
         context = super().get_context_data(**kwargs)
