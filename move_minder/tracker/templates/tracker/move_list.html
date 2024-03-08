@@ -14,7 +14,7 @@ My Moves |
         </a>
     </section>
     {% if moves %}
-    <table id="moves-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10  border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-fixed text-center">
+    <table id="moves-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10 border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-auto text-center">
         <thead class="bg-slate-200 dark:bg-slate-700">
             <tr class="p-1 sm:p-2 lg:p3">
                 <th>Start<span class="max-md:hidden">&nbsp; Date</span></th>
@@ -22,28 +22,40 @@ My Moves |
                 <th>Nickname</th>
                 <th>Owner</th>
                 <th class="max-lg:hidden">Additional Users</th>
-                <th class="hidden md:block">From</th>
-                <th class="hidden md:block">To</th>
+                <th class="hidden md:table-cell">From</th>
+                <th class="hidden md:table-cell">To</th>
             </tr>
         </thead>
         <tbody>
             {% for move in moves %}
-                <tr class="hidden lg:block border border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
-                    <a href="{% url 'tracker:move-detail' move.id %}" class="hover:bg:slate-100 dark:hover:bg-slate-800">
-                        <td>{{ move.start_date|date:"SHORT_DATE_FORMAT" }}</td>
-                        <td>{{ move.end_date|date:"SHORT_DATE_FORMAT" }}</td>
-                        <td>{{ move.nickname }}</td>
-                        <td>{{ move.primary_user__first_name }} {{ move.primary_user__last_name }}</td>
-                        <td class="max-lg:hidden">
+                <tr class="border-t border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <td class="link">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.start_date|date:"SHORT_DATE_FORMAT" }}</a>
+                    </td>
+                    <td class="link cursor-pointer" onclick="window.location='{% url "tracker:move-detail" move.id %}'">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block w-full">{{ move.end_date|date:"SHORT_DATE_FORMAT" }}</a>
+                    </td>
+                    <td class="link">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.nickname }}</a>
+                    </td>
+                    <td class="link">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.primary_user.first_name }} {{ move.primary_user.last_name }}</a>
+                    </td>
+                    <td class="link cursor-pointer max-lg:hidden" onclick="window.location='{% url "tracker:move-detail" move.id %}'">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block w-full">
                             <ul class="list-disc">
-                            {% for user in move.secondary_users %}
+                            {% for user in move.secondary_users.all %}
                                 <li>{{ user.first_name }} {{ user.last_name }}</li>
                             {% endfor %}
                             </ul>
-                        </td>
-                        <td class="hidden md:block">{{ origin_city }}<span class="hidden lg:inline">, {{ move.origin_state_province }}</span></td>
-                        <td class="hidden md:block">{{ destination_city }}<span class="hidden lg:inline">, {{ move.destination_state_province }}</span></td>
-                    </a>
+                        </a>
+                    </td>
+                    <td class="hidden link md:table-cell">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.origin_city }}<span class="hidden lg:inline">, {{ move.origin_state_province }}</span></a>
+                    </td>
+                    <td class="hidden link md:table-cell">
+                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.destination_city }}<span class="hidden lg:inline">, {{ move.destination_state_province }}</span></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

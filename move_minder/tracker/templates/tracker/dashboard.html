@@ -12,26 +12,34 @@ Dashboard |
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Your Upcoming Moves</h3>
             <div class="h-full">
                 {% if moves %}
-                    <table id="upcoming-moves-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10  border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-fixed text-center">
+                    <table id="upcoming-moves-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10  border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-auto text-center">
                         <thead class="bg-slate-200 dark:bg-slate-700">
                             <tr class="p-1 sm:p-2 lg:p3">
                                 <th>Date</th>
                                 <th>Nickname</th>
                                 <th class="md:max-lg:hidden">Owner</th>
-                                <th class="hidden md:block">From</th>
-                                <th class="hidden md:block">To</th>
+                                <th class="hidden md:table-cell">From</th>
+                                <th class="hidden md:table-cell">To</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for move in moves %}
-                                <tr class="border border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
-                                    <a href="{% url 'tracker:move-detail' move.id %}" class="hover:bg:slate-100 dark:hover:bg-slate-800">
-                                        <td>{{ move.date|date:"SHORT_DATE_FORMAT" }}</td>
-                                        <td>{{ move.nickname }}</td>
-                                        <td class="md:max-lg:hidden">{{ move.primary_user__first_name }} {{ move.primary_user__last_name }}</td>
-                                        <td class="hidden md:block">{{ move.origin_city }}</td>
-                                        <td class="hidden md:block">{{ move.destination_city }}</td>
-                                    </a>
+                                <tr class="border-t border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+                                    <td class="link">
+                                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.start_date|date:"SHORT_DATE_FORMAT" }}</a>
+                                    </td>
+                                    <td class="link">
+                                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.nickname }}</a>
+                                    </td>
+                                    <td class="link md:max-lg:hidden">
+                                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.primary_user__first_name }} {{ move.primary_user__last_name }}</a>
+                                    </td>
+                                    <td class="hidden link md:table-cell">
+                                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.origin_city }}</a>
+                                    </td>
+                                    <td class="hidden link md:table-cell">
+                                        <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.destination_city }}</a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -122,7 +130,7 @@ Dashboard |
         series: {{ parcels }}.values(), // use {{ parcels|safe }} if this doesn't work.
         labels: {{ parcels }}.keys(),
         chart: {
-            foreColor: document.classList.includes("dark") ? "#94a3b8" : "#64748b",
+            foreColor: document.classList?.includes("dark") ? "#94a3b8" : "#64748b",
             id: "parcel-chart",
             type: "pie"
         },
@@ -131,6 +139,8 @@ Dashboard |
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
 
-    chart.render();
+    if ({{ parcels|length }} > 0) {
+        chart.render();
+    }    
 </script>
 {% endblock %}

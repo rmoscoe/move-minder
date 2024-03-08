@@ -64,21 +64,12 @@ class UpdateUserForm(ModelForm):
             return password2
 
 class MoveForm(ModelForm):
+    start_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+    end_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+
     class Meta:
         model = Move
         fields = ["nickname", "primary_user", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
-        field_groups = [
-            ("Properties", ["nickname", "primary_user", "secondary_users", "start_date", "end_date"]),
-            ("Origin", ["origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country"]),
-            ("Destination", ["destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"])
-        ]
-
-        def __iter__(self):
-            for group_name, field_names in self.field_groups:
-                field_groups = []
-                for field_name in field_names:
-                    field_groups.append(self[field_name])
-                yield group_name, field_groups
 
 class ParcelForm(ModelForm):
     class Meta:

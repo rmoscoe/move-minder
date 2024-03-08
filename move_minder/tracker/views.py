@@ -169,7 +169,7 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
                 "damaged",
                 "accepted"
             )
-            context["parcels"] = parcels
+            context["parcels"] = list(parcels)
 
             recent = UserProfile.objects.filter(user=user_id).values("recent_pages")
             recent_pages = list(recent)[0]["recent_pages"][:10]
@@ -199,8 +199,9 @@ class MoveListView(SitemapMixin, LoginRequiredMixin, ListView):
     context_object_name = "moves"
 
     def get_queryset(self):
-        user_id = self.request.user.id
-        return Move.objects.filter(Q(primary_user=user_id) | Q(secondary_users__in=[user_id]))
+        user = User.objects.get(pk=self.request.user.id)
+        moves = Move.objects.select_related("primary_user").filter(Q(primary_user=user) | Q(secondary_users__in=[user])).order_by("-start_date")
+        return moves
     
     def get(self, request, *args, **kwargs):
         url = request.path
@@ -231,6 +232,27 @@ class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
 class MoveCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
     model = Move
     fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
+    template_name = "tracker/move_create.html"
+    success_url = reverse_lazy("tracker:moves-list")
+
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == "New Move":
+                history.pop(i)
+                break
+        history.insert(0, { "name": "New Move", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        form.instance.primary_user = self.request.user
+        return super().form_valid(form)
 
 class MoveUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Move
