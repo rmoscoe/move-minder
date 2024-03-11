@@ -228,6 +228,23 @@ class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
         context["parcels"] = Parcel.objects.filter(move_id=move_id)
 
         return context
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        nickname = self.get_object().nickname.strip()
+        page_name = f"Move : {nickname}"
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == page_name:
+                history.pop(i)
+                break
+        history.insert(0, { "name": page_name, "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
 
 class MoveCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
     model = Move

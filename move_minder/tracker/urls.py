@@ -18,9 +18,9 @@ urlpatterns = [
     path("moves/new/", MoveCreateView.as_view(), name="move-create"),
     path("moves/<int:pk>/edit/", MoveUpdateView.as_view(), name="move-update"),
     path("moves/<int:pk>/delete/", MoveDeleteView.as_view(), name="move-delete"),
-    path("parcels/<int:pk>/", ParcelDetailView.as_view(), name="parcel-detail"),
-    path("parcels/new/", ParcelCreateView.as_view(), name="parcel-create"),
-    path("parcels/<int:pk>/edit/", ParcelUpdateView.as_view(), name="parcel-update"),
-    path("parcels/<int:pk>/delete/", ParcelDeleteView.as_view(), name="parcel-delete"),
+    path("moves/<int:move_id>/parcels/<int:parcel_id>/", ParcelDetailView.as_view(), name="parcel-detail"),
+    path("moves/<int:pk>/parcels/new/", ParcelCreateView.as_view(), name="parcel-create"),
+    path("moves/<int:move_id>/parcels/<int:parcel_id>/edit/", ParcelUpdateView.as_view(), name="parcel-update"),
+    path("moves/<int:move_id>/parcels/<int:parcel_id>/delete/", ParcelDeleteView.as_view(), name="parcel-delete"),
     path("parcels/scan/", ParcelScanView.as_view(), name="parcel-scan")
 ]

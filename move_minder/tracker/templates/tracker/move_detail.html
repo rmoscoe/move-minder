@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Move: {{ object.nickname }} | 
+{% endblock %}
+
+{% block main %}
+<div class="px-4 lg:px-8 py-4 md:py-6 xl:py-8">
+    <h2>{{ move.nickname }}</h2>
+    <div class="box mt-4 mb-2 p-2 flex flex-wrap sm:flex-nowrap justify-between items-center">
+        <h3>Move Detail</h3>
+        <div class="flex justify-between flex-nowrap space-x-2 lg:space-x-3">
+            <a href="{% url 'tracker:move-update' move.id %}" class="btn-square cool">
+                <i class="fa-solid fa-pencil"></i>
+            </a>
+            <button class="btn-square cool">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    </div>
+
+    {% comment %} TODO: Delete Modal {% endcomment %}
+
+    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
+        <section class="light-card dark:dark-card md:order-2">
+            <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Parcel Status</h4>
+            <div class="h-full">
+                {% if parcels %}
+                    <div id="chart" class="mx-auto pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10 "></div>
+                {% else %}
+                    <div class="h-full w-full flex justify-center items-center pb-4 lg:pb-6">
+                        <p class="text-center">No parcel data to display</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+        <section class="box p-4 rounded-lg shadow-lg shadow-slate-700/60 transition lg:p-6 dark:shadow-slate-400/60 md:order-1">
+            <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Key Details</h4>
+            <table class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10  border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-auto">
+                <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                    <th class="border px-1 text-left border-slate-400 dark:border-slate-500">Nickname</th>
+                    <td class="border px-1 text-left border-slate-400 dark:border-slate-500">{{ object.nickname }}</td>
+                </tr>
+                <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                    <th class="border px-1 text-left border-slate-400 dark:border-slate-500">Start Date</th>
+                    <td class="border px-1 text-left border-slate-400 dark:border-slate-500">{{ object.start_date|date:"SHORT_DATE_FORMAT" }}</td>
+                </tr>
+                <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                    <th class="border px-1 text-left border-slate-400 dark:border-slate-500">End Date</th>
+                    <td class="border px-1 text-left border-slate-400 dark:border-slate-500">{{ object.end_date|date:"SHORT_DATE_FORMAT" }}</td>
+                </tr>
+                <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                    <th class="border px-1 text-left border-slate-400 dark:border-slate-500">Owner</th>
+                    <td class="border px-1 text-left border-slate-400 dark:border-slate-500">{{ object.primary_user.first_name }} {{ object.primary_user.last_name }}</td>
+                </tr>
+                <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                    <th class="border px-1 text-left border-slate-400 dark:border-slate-500">Additional Users</th>
+                    <td class="border px-1 text-left border-slate-400 dark:border-slate-500">
+                        <ul class="list-disc">
+                            {% for user in move.secondary_users.all %}
+                                <li>{{ user.first_name }} {{ user.last_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section class="light-card dark:dark-card order-3">
+            <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Origin</h4>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
+                <p>{{ move.origin_address1 }}</p>
+                {% if move.origin_address2 %}
+                    <p>{{ move.origin_address2 }}</p>
+                {% endif %}
+                <p>{{ move.origin_city }}, {{ move.origin_state_province }}  {{ move.origin_postal_code }} {{ move.origin_country }}</p>
+            </div>
+        </section>
+        <section class="light-card dark:dark-card order-4">
+            <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Destination</h4>
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
+                <p>{{ move.destination_address1 }}</p>
+                {% if move.destination_address2 %}
+                    <p>{{ move.destination_address2 }}</p>
+                {% endif %}
+                <p>{{ move.destination_city }}, {{ move.destination_state_province }}  {{ move.destination_postal_code }} {{ move.destination_country }}</p>
+            </div>
+        </section>
+    </section>
+
+    <section class="mt-8 md:mt-10 lg:mt-12 xl:mt-14 2xl:mt-16">
+        <div class="box mt-4 sm:mt-6 lg:mt-8 mb-2 p-2 flex flex-wrap sm:flex-nowrap justify-between items-center">
+            <h4>Parcels</h4>
+            <div class="flex justify-between flex-nowrap space-x-2 lg:space-x-3">
+                <a href="{% url 'tracker:parcel-create' move.id %}" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                    <i class="fa-solid fa-plus"></i>
+                </a>
+            </div>
+        </div>
+        {% if parcels %}
+        <table id="parcels-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10 border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-auto text-center">
+            <thead class="bg-slate-200 dark:bg-slate-700">
+                <tr class="p-1 sm:p-2 lg:p3">
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Room</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parcel in parcels %}
+                    <tr class="border-t border-t-slate-400 dark:border-t-slate-500 px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <td class="link">
+                            <a href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{parcel.id }}</a>
+                        </td>
+                        <td class="link">
+                            <a href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{ parcel.type }}</a>
+                        </td>
+                        <td class="link">
+                            <a href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{ parcel.room }}</a>
+                        </td>
+                        <td class="link">
+                            <a href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{ parcel.status }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+    {% else %}
+        <div class="h-full w-full flex justify-center items-center pb-4 lg:pb-6 md:mt-4 lg:mt-6 xl:mt-8 2xl:mt-10">
+            <p class="text-center">This move has no parcels to display</p>
+        </div>
+    {% endif %}
+    </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    const options = {
+        series: {{ parcels }}.values(), // use {{ parcels|safe }} if this doesn't work.
+        labels: {{ parcels }}.keys(),
+        chart: {
+            foreColor: document.classList?.includes("dark") ? "#94a3b8" : "#64748b",
+            id: "parcel-chart",
+            type: "pie"
+        },
+        colors: ["#0f172a", "#8b5cf6", "#ef4444", "#2563eb", "#facc15", "#10b981"]
+    };
+
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+
+    if ({{ parcels|length }} > 0) {
+        chart.render();
+    }    
+</script>
+{% endblock %}

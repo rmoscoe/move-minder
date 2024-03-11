@@ -89,7 +89,7 @@ class UserProfile(Model):
 class Move(Model):
     nickname = models.CharField(max_length=80)
     primary_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    secondary_users = models.ManyToManyField(User, verbose_name="Add Users", related_name='moves_as_secondary', null=True, blank=True)
+    secondary_users = models.ManyToManyField(User, verbose_name="Add Users", related_name='moves_as_secondary', blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     origin_address1 = models.CharField("Address 1", max_length=80)
