@@ -8,7 +8,7 @@ from django.contrib.sites.requests import RequestSite
 from django.contrib.sites.models import Site
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q, Count
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, FormView
@@ -225,7 +225,7 @@ class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
         move_id = get_object_or_404(Move, pk=self.kwargs["pk"])
 
         context = super().get_context_data(**kwargs)
-        context["parcels"] = Parcel.objects.filter(move_id=move_id)
+        context["parcels"] = list(Parcel.objects.filter(move_id=move_id))
 
         return context
     
@@ -277,7 +277,12 @@ class MoveUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
 
 class MoveDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Move
-    success_url = reverse_lazy("moves-list")
+    success_url = reverse_lazy("tracker:moves-list")
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse({ "success_url": self.success_url })
 
 class ParcelDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
     model = Parcel

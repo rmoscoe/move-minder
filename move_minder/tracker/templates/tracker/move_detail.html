@@ -15,13 +15,39 @@ Move: {{ object.nickname }} |
             <a href="{% url 'tracker:move-update' move.id %}" class="btn-square cool">
                 <i class="fa-solid fa-pencil"></i>
             </a>
-            <button class="btn-square cool">
+            <button id="delete-button" class="btn-square cool">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         </div>
     </div>
 
-    {% comment %} TODO: Delete Modal {% endcomment %}
+    <div id="delete-modal-container">
+        <div id="overlay" class="hidden absolute left-0 top-0 z-30 w-full h-full bg-slate-950/25 dark:bg-slate-50/25 transition-opacity"></div>
+
+        <section id="delete-modal" class="hidden absolute left-1/2 top-1/2 z-40 light-card dark:dark-card -translate-x-1/2 -translate-y-1/2">
+            <header class="flex justify-between items-end pb-2 border-b border-b-slate-400 dark:border-b-slate-500 mb-3 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-7 2xl:mb-8">
+                <h4>Delete Move</h4>
+                <button id="close-delete" class="btn-square cool">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+            <section class="my-4 sm:my-5 md:my-6 lg:my-8 xl:my-10 2xl:my-12">
+                {% csrf_token %}
+                <p id="warning-text">You are about to delete this move and all of its parcels. This action cannot be undone. Are you sure?</p>
+                <p id="error-text" class="hidden text-red-500 dark:text-red-600">Oops! Something went wrong.</p>
+            </section>
+            <footer class="flex justify-between items-center">
+                <button id="cancel-delete" class="btn primary subtle">Cancel</button>
+                <button id="confirm-delete" class="btn danger flex flex-nowrap items-center">
+                    <svg id="spinner" class="hidden animate-spin -ml-1 h-3.5 w-3.5 mr-3 -mb-2 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Delete</span>
+                </button>
+            </footer>
+        </section>
+    </div>
 
     <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
         <section class="light-card dark:dark-card md:order-2">
@@ -138,7 +164,7 @@ Move: {{ object.nickname }} |
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     const options = {
-        series: {{ parcels }}.values(), // use {{ parcels|safe }} if this doesn't work.
+        series: {{ parcels }}.values(),
         labels: {{ parcels }}.keys(),
         chart: {
             foreColor: document.classList?.includes("dark") ? "#94a3b8" : "#64748b",
@@ -153,5 +179,74 @@ Move: {{ object.nickname }} |
     if ({{ parcels|length }} > 0) {
         chart.render();
     }    
+
+    // TODO: Add delete functionality and attach to delete button, modal
+    const deleteButton = document.getElementById("delete-button");
+    const delOverlay = document.getElementById("overlay");
+    const modal = document.getElementById("delete-modal");
+    const closeButton = document.getElementById("close-delete");
+    const cancelButton = document.getElementById("cancel-delete");
+    const confirmButton = document.getElementById("confirm-delete");
+    const spinner = document.getElementById("spinner");
+    const wText = document.getElementById("warning-text");
+    const eText = document.getElementById("error-text");
+
+    const hideModal = () => {
+        if (wText.classList.contains("hidden")) {
+            wText.classList.remove("hidden");
+            eText.classList.add("hidden");
+        }
+        if (!spinner.classList.contains("hidden")) {
+            spinner.classList.add("hidden");
+        }
+        delOverlay.classList.add("hidden");
+        modal.classList.add("hidden");
+    } 
+
+    deleteButton.addEventListener("click", () => {
+        delOverlay.classList.remove("hidden");
+        modal.classList.remove("hidden");
+    });
+
+    delOverlay.addEventListener("click", hideModal);
+
+    closeButton.addEventListener("click", hideModal);
+
+    cancelButton.addEventListener("click", hideModal);
+
+    confirmButton.addEventListener("click", async () => {
+        spinner.classList.remove("hidden");
+        delOverlay.removeEventListener("click", hideModal);
+
+        const buttons = [closeButton, cancelButton, confirmButton];
+        buttons.forEach((button) => button.setAttribute("disabled", true));
+
+        const csrfToken = document.querySelector("input[type='hidden']");
+        const csrf = csrfToken.value;
+
+        const response = await fetch("{% url 'tracker:move-delete' move.id %}", {
+            method: "DELETE",
+            headers: {
+                "X-CSRFToken": csrf
+            }
+        });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            if (data) {
+                window.location.href = data.success_url;
+            } else {
+                wText.classList.add("hidden");
+                eText.classList.remove("hidden");
+                buttons.forEach((button) => button.removeAttribute("disabled"));
+                spinner.classList.add("hidden");
+            }
+        } else {
+            wText.classList.add("hidden");
+            eText.classList.remove("hidden");
+            buttons.forEach((button) => button.removeAttribute("disabled"));
+            spinner.classList.add("hidden");
+        }
+    });
 </script>
 {% endblock %}

@@ -107,7 +107,7 @@ h6 {
 }
 
 .btn.primary, .btn-square.primary {
-    @apply bg-slate-950 border-transparent text-slate-200 dark:bg-black hover:bg-slate-800 focus:border-slate-300 disabled:bg-slate-400 dark:text-slate-300 dark:hover:bg-slate-700 dark:disabled:bg-slate-700 dark:hover:border-slate-500/100 dark:border-slate-500/0;
+    @apply bg-slate-950 border-transparent text-slate-200 dark:bg-black hover:bg-slate-800 focus:border-slate-300 disabled:bg-slate-400 dark:text-slate-300 dark:hover:bg-slate-700 dark:disabled:bg-slate-700 dark:hover:border-slate-500/100 dark:border-slate-500/0 px-[calc(1rem-1px)] py-[calc(.5rem-1px)];
 }
 
 .btn.primary.subtle, .btn-square.primary.subtle {
