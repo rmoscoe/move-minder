@@ -71,6 +71,16 @@ class MoveForm(ModelForm):
         model = Move
         fields = ["nickname", "primary_user", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
 
+        def __init__(self, *args, request=None, **kwargs):
+            self.user = kwargs.get("instance", None)
+            super().__init__(*args, **kwargs)
+            self.request = request
+
+            if request is not None and request.resolver_match.url_name == "move-update":
+                instance = kwargs.get("instance")
+                for field in self.fields.keys():
+                    self.field[field].initial = instance[field]
+
 class ParcelForm(ModelForm):
     class Meta:
         model = Parcel

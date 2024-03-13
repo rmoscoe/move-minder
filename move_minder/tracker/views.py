@@ -273,7 +273,14 @@ class MoveCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
 
 class MoveUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Move
-    fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
+    # fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
+    form_class = MoveForm
+    template_name = "tracker/move_update.html"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.request = self.request
+        return form
 
 class MoveDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Move

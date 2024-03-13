@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Edit Move: {{ object.nicnkame }} | 
+{% endblock %}
+
+{% block main %}
+<div class="my-2 sm:my-3 md:mx-auto md:my-8 md:p-8 lg:p-12 xl:p-16 w-full">
+    <form id="edit-move-form" method="post" class="my-2 sm:my-3 mx-0 md:mx-auto md:my-8 rounded-md lg:rounded-lg box p-4 md:p-8 lg:p-12 xl:p-16 w-full md:w-4/5 lg:w-2/3 xl:w-1/2 box-border space-y-4 lg:space-y-6">
+        <h2 class="text-center">Edit Move</h2>
+        {% csrf_token %}
+        <fieldset class="form-grid">
+            <div class="fieldWrapper">
+                {{ form.nickname.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.secondary_users.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.start_date.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.end_date.as_field_group }}
+            </div>
+        </fieldset>
+        <fieldset class="form-grid">
+            <legend class="px-2 mx-2 md:mx-3 lg:mx-4 xl:mx-6 font-semibold ">Origin</legend>
+            <div class="fieldWrapper">
+                {{ form.origin_address1.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.origin_address2.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.origin_city.as_field_group }}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                <div class="fieldWrapper">
+                    {{ form.origin_state_province.as_field_group }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.origin_postal_code.as_field_group }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.origin_country.as_field_group }}
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="form-grid">
+            <legend class="px-2 mx-2 md:mx-3 lg:mx-4 xl:mx-6 font-semibold ">Destination</legend>
+            <div class="fieldWrapper">
+                {{ form.destination_address1.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.destination_address2.as_field_group }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.destination_city.as_field_group }}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                <div class="fieldWrapper">
+                    {{ form.destination_state_province.as_field_group }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.destination_postal_code.as_field_group }}
+                </div>
+                <div class="fieldWrapper">
+                    {{ form.destination_country.as_field_group }}
+                </div>
+            </div>
+        </fieldset>
+        {% if form_errors %}
+            <div>
+                <p class="text-red-500 dark:text-red-600 text-sm md:text-base">Please correct the following errors:</p>
+                <ul class="errorlist">
+                    {% for field, error_list in form_errors.items %}
+                        {% for error in error_list %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class="pt-3 w-full">
+            <input type="submit" value="Submit" class="ml-auto btn primary" />
+        </div>
+    </form>
+</div>
+
+<script>
+    const formDivs = document.querySelectorAll(".fieldWrapper");
+    formDivs.forEach(div => {
+        const label = div.querySelector("label");
+        const input = div.querySelector("input");
+
+        if (input?.hasAttribute("required")) {
+            label.classList.add("font-bold");
+            const labelText = label.innerText;
+            let newLabel = "";
+            for (let i = 0; i < labelText.length - 1; i++) {
+                newLabel += labelText[i];
+            }
+            newLabel += "*:";
+            label.innerText = newLabel;
+        }
+
+        if (["Start date:", "Start date*:", "End date:"].includes(label.innerText)) {
+            input.setAttribute("type", "date");
+        }
+
+        const errorList = div.querySelector("ul.errorlist");
+        if (input && errorList) {
+            input?.classList.add("invalid");
+        } else {
+            input?.classList.remove("invalid");
+        }
+
+        const helpText = div.querySelector(".helptext");
+        if (input?.matches(":focus")) {
+            helpText?.classList.remove("hidden");
+            helpText?.classList.add("flex");
+        } else {
+            helpText?.classList.add("hidden");
+            helpText?.classList.remove("flex");
+        }
+
+        input?.addEventListener("focusout", (event) => {
+            if (!event.relatedTarget || !event.relatedTarget.closest('a[href]')) {
+                input?.classList.remove("invalid");
+                errorList?.remove();
+                helpText?.classList.add("hidden");
+                helpText?.classList.remove("flex");
+            }
+        });
+
+        input?.addEventListener("focusin", (event) => {
+            event.stopPropagation();
+            helpText?.classList.remove("hidden");
+            helpText?.classList.add("flex");
+        });
+    });
+</script>
+{% endblock %}
