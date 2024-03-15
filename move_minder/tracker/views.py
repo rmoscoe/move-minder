@@ -273,14 +273,37 @@ class MoveCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
 
 class MoveUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Move
-    # fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
-    form_class = MoveForm
+    fields = ["nickname", "secondary_users", "start_date", "end_date", "origin_address1", "origin_address2", "origin_city", "origin_state_province", "origin_postal_code", "origin_country", "destination_address1", "destination_address2", "destination_city", "destination_state_province", "destination_postal_code", "destination_country"]
     template_name = "tracker/move_update.html"
+    
+    def get_success_url(self):
+        url = reverse("tracker:move-detail", kwargs={'pk': self.get_object().id})
+        print(url)
+        return url
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.request = self.request
         return form
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == f"Edit Move: {self.get_object().nickname.strip()}":
+                history.pop(i)
+                break
+        history.insert(0, { "name": f"Edit Move: {self.get_object().nickname.strip()}", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        form.instance.primary_user = self.request.user
+        return super().form_valid(form)
 
 class MoveDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Move
@@ -325,3 +348,6 @@ class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
 
 class ParcelScanView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name="tracker/parcel-scan.html"
+
+class LabelPreview(TemplateView):
+    template_name="tracker/labels.html"

@@ -2,25 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .light-page {
-    @apply bg-white text-slate-500 font-sans text-base;
+body {
+    @apply print:m-0 print:p-0;
 }
-
-.dark-page {
-    @apply bg-slate-900 text-slate-400 font-sans text-base;
-} */
 
 .page {
     @apply bg-white text-slate-500 font-sans text-base dark:bg-slate-900 dark:text-slate-400;
 }
-
-/* .light-box {
-    @apply bg-slate-200 text-slate-600;
-}
-
-.dark-box {
-    @apply bg-slate-800 text-slate-300;
-} */
 
 .box {
     @apply bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300;
@@ -38,9 +26,6 @@
     @apply page p-4 rounded-lg shadow-lg shadow-slate-400/60 transition lg:p-6;
 }
 
-/* .primary-blue {
-    @apply bg-blue-600 text-slate-200 dark:bg-blue-700 dark:text-slate-300;
-} */
 
 .secondary-violet {
     @apply bg-violet-500 text-slate-600 dark:bg-violet-600 dark:text-slate-300;
@@ -54,17 +39,9 @@
     @apply text-sky-400 dark:text-sky-500;
 }
 
-/* .success-bg {
-    @apply bg-emerald-500 dark:bg-emerald-600;
-} */
-
 .warning {
     @apply bg-yellow-400 dark:bg-yellow-500;
 }
-
-/* .danger {
-    @apply bg-red-500 dark:bg-red-600;
-} */
 
 h1 {
     @apply text-4xl sm:text-5xl md:text-6xl text-black font-bold dark:text-white;

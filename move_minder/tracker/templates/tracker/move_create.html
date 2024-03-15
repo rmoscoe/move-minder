@@ -73,11 +73,11 @@ New Move |
             </div>
         </fieldset>
         <div class="form-grid">
-            {% if form_errors %}
+            {% if form.errors %}
                 <div>
                     <p class="text-red-500 dark:text-red-600 text-sm md:text-base">Please correct the following errors:</p>
                     <ul class="errorlist">
-                        {% for field, error_list in form_errors.items %}
+                        {% for field, error_list in form.errors.items %}
                             {% for error in error_list %}
                                 <li>{{ field }}: {{ error }}</li>
                             {% endfor %}

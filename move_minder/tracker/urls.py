@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView
+from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView, LabelPreview
 
 app_name = "tracker"
 
@@ -22,5 +22,6 @@ urlpatterns = [
     path("moves/<int:pk>/parcels/new/", ParcelCreateView.as_view(), name="parcel-create"),
     path("moves/<int:move_id>/parcels/<int:parcel_id>/edit/", ParcelUpdateView.as_view(), name="parcel-update"),
     path("moves/<int:move_id>/parcels/<int:parcel_id>/delete/", ParcelDeleteView.as_view(), name="parcel-delete"),
-    path("parcels/scan/", ParcelScanView.as_view(), name="parcel-scan")
+    path("parcels/scan/", ParcelScanView.as_view(), name="parcel-scan"),
+    path("labels/", LabelPreview.as_view(), name="label-preview")
 ]

@@ -122,6 +122,9 @@ Move: {{ object.nickname }} |
                 <a href="{% url 'tracker:parcel-create' move.id %}" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
                     <i class="fa-solid fa-plus"></i>
                 </a>
+                <button id="print-labels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                    <i class="fa-solid fa-print"></i>
+                </button>
             </div>
         </div>
         {% if parcels %}

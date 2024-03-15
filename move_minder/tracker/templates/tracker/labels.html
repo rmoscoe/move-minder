@@ -1,0 +1,46 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}Labels | {% endblock %}MoveMinder</title>
+        <meta name="description" content="Track the status and contents of your possessions during a move with ease.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'fontawesomefree/css/regular.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+		{% tailwind_css %}
+        <style>
+            @media print {
+                @page {
+                    size: 8.5in 11in;
+                    margin:0;
+                }
+            }
+        </style>
+        <script>
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
+    </head>
+    <body class="h-[11in] w-[8.5in]">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <main class="mx-[.5in] mt-[.43in] mb-[.42in] gap-x-[.5in] gap-y-[.15in] flex flex-wrap">
+            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
+            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
+            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
+            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
+        </main>
+        <script src="" async defer></script>
+    </body>
+</html>
