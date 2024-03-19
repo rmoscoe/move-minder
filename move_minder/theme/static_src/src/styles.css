@@ -149,7 +149,7 @@ label {
 }
 
 form > div {
-    @apply mx-auto inline-block static;
+    @apply mx-auto inline-block static w-full;
 }
 
 ul.errorlist {

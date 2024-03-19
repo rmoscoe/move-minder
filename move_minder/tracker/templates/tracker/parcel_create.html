@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+New Parcel | 
+{% endblock %}
+
+{% block main %}
+<div class="my-2 sm:my-3 md:mx-auto md:my-8 md:p-8 lg:p-12 xl:p-16 w-full">
+    <form id="create-parcel-form" method="post" class="form-grid my-2 sm:my-3 mx-0 md:mx-auto md:my-8 rounded-md lg:rounded-lg box p-4 md:p-8 lg:p-12 xl:p-16 w-full md:w-4/5 lg:w-2/3 xl:w-1/2 box-border space-y-4 lg:space-y-6" enctype="multipart/form-data">
+        <h2 class="text-center">{{ move.nickname }}: New Parcel</h2>
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button id="camera-button" class="btn-square primary"><i class="fa fa-camera"></i></button>
+        <div>
+            {% if form.errors %}
+                <div>
+                    <p class="text-red-500 dark:text-red-600 text-sm md:text-base">Please correct the following errors:</p>
+                    <ul class="errorlist">
+                        {% for field, error_list in form.errors.items %}
+                            {% for error in error_list %}
+                                <li>{{ field }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="flex flex-wrap justify-between pt-3">
+                <a href="{% url 'tracker:move-detail' move.id %}" class="btn primary subtle">Cancel</a>
+                <input type="submit" value="Submit" class="btn primary" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const setProps = () => {
+        const typeMenu = document.getElementById("id_type");
+        const formDivs = document.querySelectorAll("form > div");
+        typeMenu.setAttribute("required", true);
+        formDivs.forEach(div => {
+            const label = div.querySelector("label");
+            const input = div.querySelector("input");
+            const select = div.querySelector("select");
+            const textarea = div.querySelector("textarea");
+
+            if (input?.hasAttribute("required") || select?.hasAttribute("required") || textarea?.hasAttribute("required")) {
+                // label.classList.add("font-bold");
+                const labelText = label.innerText;
+                let newLabel = "";
+                for (let i = 0; i < labelText.length - 1; i++) {
+                    newLabel += labelText[i];
+                }
+                newLabel += "*:";
+                label.innerText = newLabel;
+                label.classList.add("font-semibold");
+            }
+
+            const errorList = div.querySelector("ul.errorlist");
+            if (input && errorList) {
+                input?.classList.add("invalid");
+            } else {
+                input?.classList.remove("invalid");
+            }
+
+            const helpText = div.querySelector(".helptext");
+            if (input?.matches(":focus")) {
+                helpText?.classList.remove("hidden");
+                helpText?.classList.add("flex");
+            } else {
+                helpText?.classList.add("hidden");
+                helpText?.classList.remove("flex");
+            }
+
+            input?.addEventListener("focusout", (event) => {
+                if (!event.relatedTarget || !event.relatedTarget.closest('a[href]')) {
+                    input?.classList.remove("invalid");
+                    errorList?.remove();
+                    helpText?.classList.add("hidden");
+                    helpText?.classList.remove("flex");
+                }
+            });
+
+            select?.addEventListener("focusout", (event) => {
+                if (!event.relatedTarget || !event.relatedTarget.closest('a[href]')) {
+                    select?.classList.remove("invalid");
+                    errorList?.remove();
+                    helpText?.classList.add("hidden");
+                    helpText?.classList.remove("flex");
+                }
+            });
+
+            textarea?.addEventListener("focusout", (event) => {
+                if (!event.relatedTarget || !event.relatedTarget.closest('a[href]')) {
+                    textarea?.classList.remove("invalid");
+                    errorList?.remove();
+                    helpText?.classList.add("hidden");
+                    helpText?.classList.remove("flex");
+                }
+            });
+
+            input?.addEventListener("focusin", (event) => {
+                event.stopPropagation();
+                helpText?.classList.remove("hidden");
+                helpText?.classList.add("flex");
+            });
+
+            select?.addEventListener("focusin", (event) => {
+                event.stopPropagation();
+                helpText?.classList.remove("hidden");
+                helpText?.classList.add("flex");
+            });
+
+            textarea?.addEventListener("focusin", (event) => {
+                event.stopPropagation();
+                helpText?.classList.remove("hidden");
+                helpText?.classList.add("flex");
+            });
+        });
+
+        document.getElementById("id_photo").setAttribute("capture", "environment");
+    }
+    
+    window.addEventListener("load", setProps);
+    document.getElementById("camera-button").addEventListener("click", (event) => {
+        event.preventDefault();
+        document.getElementById("id_photo").click();
+    })
+</script>
+{% endblock %}

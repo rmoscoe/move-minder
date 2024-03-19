@@ -325,6 +325,42 @@ class ParcelDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
 class ParcelCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
     model = Parcel
     fields = ["type", "room", "contents", "photo", "weight"]
+    template_name = "tracker/parcel_create.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get("pk")
+        context["move"] = get_object_or_404(Move, pk=pk)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        move_pk = kwargs.get('pk')
+        move = get_object_or_404(Move, pk=move_pk)
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == f"{move.nickname}: New Parcel":
+                history.pop(i)
+                break
+        history.insert(0, { "name": f"{move.nickname}: New Parcel", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        pk = self.kwargs.get('pk')
+        move = get_object_or_404(Move, pk=pk)
+        instance = form.save(commit=False)
+        instance.move_id = move
+        instance.save()
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        url = reverse("tracker:move-detail", kwargs={"pk": self.kwargs.get("pk")})
+        return url
 
 class ParcelStatusUpdateView(SitemapMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
     template_name = "tracker/parcel_detail.html"
