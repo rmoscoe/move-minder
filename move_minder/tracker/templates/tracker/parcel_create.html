@@ -12,8 +12,63 @@ New Parcel |
     <form id="create-parcel-form" method="post" class="form-grid my-2 sm:my-3 mx-0 md:mx-auto md:my-8 rounded-md lg:rounded-lg box p-4 md:p-8 lg:p-12 xl:p-16 w-full md:w-4/5 lg:w-2/3 xl:w-1/2 box-border space-y-4 lg:space-y-6" enctype="multipart/form-data">
         <h2 class="text-center">{{ move.nickname }}: New Parcel</h2>
         {% csrf_token %}
-        {{ form.as_div }}
-        <button id="camera-button" class="btn-square primary"><i class="fa fa-camera"></i></button>
+        <div class="fieldWrapper">
+            {{ form.type.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.room.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.contents.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            <label class="block" for="{{ form.photo.id_for_label }}">
+                <span>Photo:</span>
+            </label>
+            <div class="flex flex-nowrap justify-between space-x-2 lg:space-x-3 items-center">
+                <button id="camera-button" class="btn-square primary">
+                    <i class="fa fa-camera"></i>
+                </button>
+                <span>or</span>
+                {{ form.photo }}
+            </div>
+            <div id="camera-div" class="absolute w-screen h-screen top-0 left-0 lg:w-[80vw] lg:h-[80vh] lg:top-[10vh] lg:left-[10vw] xl:w-[70vw] xl:h-[70vh] xl:left-[15vw] xl:top-[15vh] 2xl:w-[60vw] 2xl:h-[60vh] 2xl:top-[20vh] 2xl:left-[20vw] hidden bg-white dark:bg-slate-900">
+                <div class="flex justify-end p-3 md:p-4 lg:p-6 xl:p-8 w-full">
+                    <button id="close-camera-button" class="btn-square opacity-70">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="w-full relative">
+                    <video id="camera-feed" autoplay class="hidden w-full h-full object-cover"></video>
+                    <canvas id="canvas" class="hidden w-full h-full object-cover"></canvas>
+                </div>
+                {% comment %} Snap button (center), Flip button (right); visible with <video> {% endcomment %}
+                <div id="camera-controls" class="hidden grid-cols-3 p-3 md:p-4 lg:p-6 xl:p-8 w-full items-center">
+                    <div class="flex justify-center items-center">
+                        <button id="snap-button" class="col-start-2 size-8 sm:size-9 md:size-10 xl:size-11 rounded-full ring-1 md:ring-2 ring-offset-2 lg:ring-offset-4 ring-slate-700 bg-slate-700 dark:ring-slate-200 dark:bg-slate-200"></button>
+                    </div>
+                    <div class="flex justify-end items-center">
+                        <button id="flip-button" class="btn-square cool">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+                </div>
+                {% comment %} Try Again button (left), Save button (right); visible with <canvas> {% endcomment %}
+                <div id="canvas-controls" class="hidden p-3 md:p-4 lg:p-6 xl:p-8 w-full justify-between items-center">
+                    <button id="try-again-button" class="btn primary space-x-2">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Try Again</span>
+                    </button>
+                    <button id="save-button" class="btn success space-x-2">
+                        <i class="fa-regular fa-circle-check"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="fieldWrapper">
+            {{ form.weight.as_field_group }}
+        </div>
         <div>
             {% if form.errors %}
                 <div>
@@ -36,6 +91,10 @@ New Parcel |
 </div>
 
 <script>
+    const cameraButton = document.getElementById("camera-button");
+    const photoInput = document.getElementById("id_photo");
+    const cameraFeed = document.getElementById("camera-feed");
+
     const setProps = () => {
         const typeMenu = document.getElementById("id_type");
         const formDivs = document.querySelectorAll("form > div");
@@ -120,13 +179,9 @@ New Parcel |
             });
         });
 
-        document.getElementById("id_photo").setAttribute("capture", "environment");
+        photoInput.setAttribute("capture", "environment");
     }
     
     window.addEventListener("load", setProps);
-    document.getElementById("camera-button").addEventListener("click", (event) => {
-        event.preventDefault();
-        document.getElementById("id_photo").click();
-    })
 </script>
 {% endblock %}

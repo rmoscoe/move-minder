@@ -122,9 +122,14 @@ Move: {{ object.nickname }} |
                 <a href="{% url 'tracker:parcel-create' move.id %}" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
                     <i class="fa-solid fa-plus"></i>
                 </a>
+                {% if parcels %}
                 <button id="print-labels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
                     <i class="fa-solid fa-print"></i>
                 </button>
+                <button id="ship-all-parcels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                    <i class="fa-solid fa-truck-arrow-right"></i>
+                </button>
+                {% endif %}
             </div>
         </div>
         {% if parcels %}
@@ -167,8 +172,8 @@ Move: {{ object.nickname }} |
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     const options = {
-        series: {{ parcels }}.values(),
-        labels: {{ parcels }}.keys(),
+        series: Object.values({{ parcel_status|safe }}),
+        labels: Object.keys({{ parcel_status|safe }}),
         chart: {
             foreColor: document.classList?.includes("dark") ? "#94a3b8" : "#64748b",
             id: "parcel-chart",

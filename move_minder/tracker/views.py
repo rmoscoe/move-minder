@@ -21,6 +21,7 @@ from .models import Move, Parcel, UserProfile
 from move_minder.sitemaps import StaticViewSitemap
 import os
 from phonenumber_field.formfields import PhoneNumberField
+import re
 
 # Create your views here.
 class SitemapMixin:
@@ -154,7 +155,7 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
             )
             context["moves"] = upcoming[:10]
 
-            parcels = Parcel.objects.filter(move_id__in=moves).annotate(
+            parcels_query = Parcel.objects.filter(move_id__in=moves).annotate(
                 packed=Count("id", filter=Q(status="Packed")),
                 in_transit=Count("id", filter=Q(status="In Transit")),
                 lost=Count("id", filter=Q(status="Lost")),
@@ -169,7 +170,23 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
                 "damaged",
                 "accepted"
             )
-            context["parcels"] = list(parcels)
+
+            parcels = {}
+            if len(parcels_query) > 0:
+                for key, value in parcels_query[0].items():
+                    new_key = re.sub("_", " ", key.title())
+                    parcels[new_key] = value
+            else:
+                parcels = {
+                    "Packed": 0,
+                    "In Transit": 0,
+                    "Lost": 0,
+                    "Received": 0,
+                    "Damaged": 0,
+                    "Accepted": 0
+                }
+            
+            context["parcels"] = parcels
 
             recent = UserProfile.objects.filter(user=user_id).values("recent_pages")
             recent_pages = list(recent)[0]["recent_pages"][:10]
@@ -225,7 +242,40 @@ class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
         move_id = get_object_or_404(Move, pk=self.kwargs["pk"])
 
         context = super().get_context_data(**kwargs)
-        context["parcels"] = list(Parcel.objects.filter(move_id=move_id))
+        parcels = Parcel.objects.filter(move_id=move_id)
+        context["parcels"] = parcels
+        parcel_status_query = parcels.annotate(
+                packed=Count("id", filter=Q(status="Packed")),
+                in_transit=Count("id", filter=Q(status="In Transit")),
+                lost=Count("id", filter=Q(status="Lost")),
+                received=Count("id", filter=Q(status="Received")),
+                damaged=Count("id", filter=Q(status="Damaged")),
+                accepted=Count("id", filter=Q(status="Accepted"))
+            ).values(
+                "packed",
+                "in_transit",
+                "lost",
+                "received",
+                "damaged",
+                "accepted"
+            )
+        
+        parcel_status = {}
+        if len(parcel_status_query) > 0:
+            for key, value in parcel_status_query[0].items():
+                new_key = re.sub("_", " ", key.title())
+                parcel_status[new_key] = value
+        else:
+            parcel_status = {
+                "Packed": 0,
+                "In Transit": 0,
+                "Lost": 0,
+                "Received": 0,
+                "Damaged": 0,
+                "Accepted": 0
+            }
+        
+        context["parcel_status"] = parcel_status
 
         return context
     

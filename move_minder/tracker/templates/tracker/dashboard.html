@@ -127,8 +127,8 @@ Dashboard |
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     const options = {
-        series: {{ parcels }}.values(), // use {{ parcels|safe }} if this doesn't work.
-        labels: {{ parcels }}.keys(),
+        series: Object.values({{ parcels|safe }}), // use {{ parcels|safe }} if this doesn't work.
+        labels: Object.keys({{ parcels|safe }}),
         chart: {
             foreColor: document.classList?.includes("dark") ? "#94a3b8" : "#64748b",
             id: "parcel-chart",
