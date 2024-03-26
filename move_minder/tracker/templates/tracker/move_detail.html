@@ -24,7 +24,7 @@ Move: {{ object.nickname }} |
     <div id="delete-modal-container">
         <div id="overlay" class="hidden absolute left-0 top-0 z-30 w-full h-full bg-slate-950/25 dark:bg-slate-50/25 transition-opacity"></div>
 
-        <section id="delete-modal" class="hidden absolute left-1/2 top-1/2 z-40 light-card dark:dark-card -translate-x-1/2 -translate-y-1/2">
+        <section id="delete-modal" class="hidden absolute left-1/2 top-1/2 z-40 card -translate-x-1/2 -translate-y-1/2">
             <header class="flex justify-between items-end pb-2 border-b border-b-slate-400 dark:border-b-slate-500 mb-3 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-7 2xl:mb-8">
                 <h4>Delete Move</h4>
                 <button id="close-delete" class="btn-square cool">
@@ -50,7 +50,7 @@ Move: {{ object.nickname }} |
     </div>
 
     <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
-        <section class="light-card dark:dark-card md:order-2">
+        <section class="card md:order-2">
             <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Parcel Status</h4>
             <div class="h-full">
                 {% if parcels %}
@@ -93,7 +93,7 @@ Move: {{ object.nickname }} |
                 </tr>
             </table>
         </section>
-        <section class="light-card dark:dark-card order-3">
+        <section class="card order-3">
             <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Origin</h4>
             <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
                 <p>{{ move.origin_address1 }}</p>
@@ -103,7 +103,7 @@ Move: {{ object.nickname }} |
                 <p>{{ move.origin_city }}, {{ move.origin_state_province }}  {{ move.origin_postal_code }} {{ move.origin_country }}</p>
             </div>
         </section>
-        <section class="light-card dark:dark-card order-4">
+        <section class="card order-4">
             <h4 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Destination</h4>
             <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10">
                 <p>{{ move.destination_address1 }}</p>
@@ -127,11 +127,21 @@ Move: {{ object.nickname }} |
                     <i class="fa-solid fa-print"></i>
                 </button>
                 <button id="ship-all-parcels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
-                    <i class="fa-solid fa-truck-arrow-right"></i>
+                    <i id="bulk-ship-icon" class="fa-solid fa-truck-arrow-right"></i>
+                    <svg id="bulk-ship-spinner" class="hidden animate-spin -ml-1 h-3.5 w-3.5 mr-3 -mb-2 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
                 </button>
                 {% endif %}
             </div>
         </div>
+        <section id="error-message" class="hidden relative w-full justify-center items-center my-4 md:my-6 lg:my-8 xl:my-10 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14 rounded-lg bg-red-500 dark:bg-red-600 text-slate-100 dark:text-slate-800">
+            <button id="close-error" class="rounded-full absolute -top-0.5 md:max-xl:-top-1 right-px md:text-lg xl:text-xl opacity-60 hover:text-white dark:hover:text-slate-700">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <p>Oops! Something went wrong.</p>
+        </section>
         {% if parcels %}
         <table id="parcels-table" class="pt-4 sm:pt-5 md:pt-7 lg:pt-9 xl:pt-10 border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 w-full table-auto text-center">
             <thead class="bg-slate-200 dark:bg-slate-700">
@@ -155,7 +165,7 @@ Move: {{ object.nickname }} |
                             <a href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{ parcel.room }}</a>
                         </td>
                         <td class="link">
-                            <a href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{ parcel.status }}</a>
+                            <a id="status-{{ parcel.id }}" href="{% url 'tracker:parcel-detail' move.id parcel.id %}" class="block">{{ parcel.status }}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -198,6 +208,9 @@ Move: {{ object.nickname }} |
     const spinner = document.getElementById("spinner");
     const wText = document.getElementById("warning-text");
     const eText = document.getElementById("error-text");
+    const bulkShip = document.getElementById("ship-all-parcels-button");
+    const errorMsg = document.getElementById("error-message");
+    const closeErr = document.getElementById("close-error");
 
     const hideModal = () => {
         if (wText.classList.contains("hidden")) {
@@ -255,6 +268,48 @@ Move: {{ object.nickname }} |
             buttons.forEach((button) => button.removeAttribute("disabled"));
             spinner.classList.add("hidden");
         }
+    });
+
+    bulkShip.addEventListener("click", async () => {
+        bulkShip.setAttribute("disabled", true);
+        const spinner = document.getElementById("bulk-ship-spinner");
+        const icon = document.getElementById("bulk-ship-icon");
+
+        icon.classList.add("hidden");
+        spinner.classList.remove("hidden");
+
+        const csrfToken = document.querySelector("input[type='hidden']");
+        const csrf = csrfToken.value;
+
+        const response = await fetch("{% url 'tracker:bulk-ship' move.id %}", {
+            method: "PATCH",
+            headers: {
+                "X-CSRFToken": csrf
+            }
+        });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                const statusField = document.getElementById(`status-${data[i].id}`);
+                if (statusField) {
+                    statusField.textContent = data[i].status;
+                }
+            }
+            bulkShip.removeAttribute("disabled");
+        } else {
+            errorMsg.classList.remove("hidden");
+            errorMsg.classList.add("flex");
+        }
+
+        spinner.classList.add("hidden");
+        icon.classList.remove("hidden");
+    });
+
+    closeErr.addEventListener("click", () => {
+        errorMsg.classList.remove("flex");
+        errorMsg.classList.add("hidden");
     });
 </script>
 {% endblock %}

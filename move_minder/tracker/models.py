@@ -137,6 +137,6 @@ class Parcel(Model):
     contents = models.TextField(null=True, blank=True, help_text="Optionally, describe the contents of this parcel.")
     photo = models.ImageField(upload_to='images/', max_length=255, null=True, blank=True)
     weight = models.FloatField(blank=True, null=True, help_text="Optionally, enter the weight of the parcel in pounds.")
-    status = models.CharField(max_length=12, choices={choice: choice for choice in status_choices}, default="Ready")
+    status = models.CharField(max_length=12, choices={choice: choice for choice in status_choices}, default="Packed")
     created = models.DateTimeField(auto_now_add=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True)

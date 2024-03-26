@@ -8,9 +8,10 @@ from django.contrib.sites.requests import RequestSite
 from django.contrib.sites.models import Site
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q, Count
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
@@ -155,25 +156,18 @@ class DashboardView(SitemapMixin, LoginRequiredMixin, TemplateView):
             )
             context["moves"] = upcoming[:10]
 
-            parcels_query = Parcel.objects.filter(move_id__in=moves).annotate(
+            parcels_query = Parcel.objects.filter(move_id__in=moves).aggregate(
                 packed=Count("id", filter=Q(status="Packed")),
                 in_transit=Count("id", filter=Q(status="In Transit")),
                 lost=Count("id", filter=Q(status="Lost")),
                 received=Count("id", filter=Q(status="Received")),
                 damaged=Count("id", filter=Q(status="Damaged")),
                 accepted=Count("id", filter=Q(status="Accepted"))
-            ).values(
-                "packed",
-                "in_transit",
-                "lost",
-                "received",
-                "damaged",
-                "accepted"
             )
 
             parcels = {}
             if len(parcels_query) > 0:
-                for key, value in parcels_query[0].items():
+                for key, value in parcels_query.items():
                     new_key = re.sub("_", " ", key.title())
                     parcels[new_key] = value
             else:
@@ -244,25 +238,18 @@ class MoveDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         parcels = Parcel.objects.filter(move_id=move_id)
         context["parcels"] = parcels
-        parcel_status_query = parcels.annotate(
-                packed=Count("id", filter=Q(status="Packed")),
-                in_transit=Count("id", filter=Q(status="In Transit")),
-                lost=Count("id", filter=Q(status="Lost")),
-                received=Count("id", filter=Q(status="Received")),
-                damaged=Count("id", filter=Q(status="Damaged")),
-                accepted=Count("id", filter=Q(status="Accepted"))
-            ).values(
-                "packed",
-                "in_transit",
-                "lost",
-                "received",
-                "damaged",
-                "accepted"
-            )
+        parcel_status_query = parcels.aggregate(
+            packed=Count("id", filter=Q(status="Packed")),
+            in_transit=Count("id", filter=Q(status="In Transit")),
+            lost=Count("id", filter=Q(status="Lost")),
+            received=Count("id", filter=Q(status="Received")),
+            damaged=Count("id", filter=Q(status="Damaged")),
+            accepted=Count("id", filter=Q(status="Accepted"))
+        )
         
         parcel_status = {}
         if len(parcel_status_query) > 0:
-            for key, value in parcel_status_query[0].items():
+            for key, value in parcel_status_query.items():
                 new_key = re.sub("_", " ", key.title())
                 parcel_status[new_key] = value
         else:
@@ -437,3 +424,27 @@ class ParcelScanView(SitemapMixin, LoginRequiredMixin, TemplateView):
 
 class LabelPreview(TemplateView):
     template_name="tracker/labels.html"
+
+class ShipParcelsView(View):
+    def patch(self, request, *args, **kwargs):
+        try:
+            move_id = kwargs.get('move_id', None)
+            if move_id is None:
+                return HttpResponse("Move ID is required", status=400)
+            move = get_object_or_404(Move, pk=move_id)
+            parcels = Parcel.objects.filter(move_id=move, status="Packed")
+            ids = []
+            if len(parcels) > 0:
+                for parcel in parcels:
+                    ids.append(parcel.id)
+                parcels.update(status="In Transit")
+                parcel_list = []
+                qs = Parcel.objects.filter(move_id=move, id__in=ids)
+                for parcel in qs:
+                    parcel_dict = parcel.__dict__.copy()
+                    _ = parcel_dict.pop("_state")
+                    parcel_list.append(parcel_dict)
+            return JsonResponse(parcel_list, safe=False)
+        except Exception as e:
+            print(e)
+            return HttpResponse(e, status=500)
