@@ -85,3 +85,13 @@ class ParcelForm(ModelForm):
     class Meta:
         model = Parcel
         fields = ["move_id", "type", "room", "contents", "photo", "weight", "status"]
+    
+        def __init__(self, *args, request=None, **kwargs):
+            self.user = kwargs.get("instance", None)
+            super().__init__(*args, **kwargs)
+            self.request = request
+
+            if request is not None and request.resolver_match.url_name == "parcel-update":
+                instance = kwargs.get("instance")
+                for field in self.fields.keys():
+                    self.field[field].initial = instance[field]

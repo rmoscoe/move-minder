@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Parcel: {{ object.id }} | 
+{% endblock %}
+
+{% block main %}
+<div class="px-4 lg:px-8 py-4 md:py-6 xl:py-8">
+    <h2>Parcel: {{ object.id }}</h2>
+    <div class="box w-full flex justify-between items-center mt-4 mb-2 py-1 px-2">
+        <a href="{% url 'tracker:move-detail' object.move_id.id %}" class="hover:text-blue-500 dark:hover:text-blue-600 visited:text-violet-500 dark:visited:text-violet-600 underline">{{ object.move_id.nickname}}: Move Detail</a>
+        <div class="space-x-2 flex">
+            <button id="print-label-button" class="btn-square cool">
+                <i class="fa-solid fa-print"></i>
+            </button>
+            <a href="{% url 'tracker:parcel-update' object.move_id.id object.id %}" class="btn-square cool">
+                <i class="fa-solid fa-pencil"></i>
+            </a>
+            <button id="delete-button" class="btn-square cool">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    </div>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
+        <section class="card">
+            <form id="parcel-status-form" method="POST" class="form-grid">
+                {% csrf_token %}
+                {{ form.as_div }}
+                <div>
+                    <button id="submit-button" type="button" class="btn cool ml-auto">
+                        <svg id="spinner" class="hidden animate-spin size-5 mr-1 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Submit</span>
+                    </button>
+                </div>
+            </form>
+            {% if success %}
+            <div id="success-div" class="mt-6 sm:mt-8 md:mt-10 lg:mt-12 2xl:mt-16 w-4/5 bg-emerald-500 dark:bg-emerald-600 relative mx-auto px-3 py-8 md:px-4 md:py-10 xl:px-6 xl:py-12 rounded-lg transition duration-300">
+                <button id="hide-success" class="absolute -top-0.5 right-1 rounded-full text-emerald-900 dark:text-emerald-950 hover:text-emerald-800 dark:hover:text-emerald-900">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+                <div class="grid grid-cols-4 items-center">
+                    <svg class=" fill-white dark:fill-slate-900"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L369 209z"/></svg>
+                    <p class="text-white dark:text-slate-900 col-span-3 text-center px-4">Status updated successfully</p>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+        <section class="card md:order-first">
+            {% if object.photo %}
+            <img src="{{ object.photo }}" alt="{{ object.contents }}" class="mx-auto" />
+            {% else %}
+            <div class="w-full h-full bg-slate-200 text-slate-100 dark:bg-slate-800 dark:text-slate-700">
+                <svg class="fill-slate-100 dark:fill-slate-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z"/></svg>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="card">
+            <h3 class="w-full border-b border-slate-400 dark:border-slate-600">Contents</h3>
+            <div class="mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10">
+                {{ object.contents|linebreaksbr }}
+            </div>
+        </section>
+
+        <section class="card">
+            <h3 class="w-full border-b border-slate-400 dark:border-slate-600">Details</h3>
+            <div class="mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10">
+                <table class="w-full border-collapse border border-slate-400 dark:border-slate-500 border-spacing-0 table-auto">
+                    <tbody>
+                        <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                            <th scope="row" class="box text-start border px-1 border-slate-400 dark:border-slate-500">Type</th>
+                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{{ object.type }}</td>
+                        </tr>
+                        <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                            <th scope="row" class="box text-start border px-1 border-slate-400 dark:border-slate-500">Room</th>
+                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{{ object.room }}</td>
+                        </tr>
+                        <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
+                            <th scope="row" class="box text-start border px-1 border-slate-400 dark:border-slate-500">Weight</th>
+                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{{ object.weight }} lbs.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</div>
+<script>
+    const successDiv = document.getElementById("success-div");
+    const closeButton = document.getElementById("hide-success");
+    const submitButton = document.getElementById("submit-button");
+    const spinner = document.getElementById("spinner");
+    const form = document.getElementById("parcel-status-form");
+
+    const handleFormSubmit = (event) => {
+        if (event.key && event.key === "Enter") {
+            event.preventDefault();
+        }
+        if (event.key && event.key !== "Enter") {
+            return;
+        }
+        submitButton.setAttribute("disabled", true);
+        spinner.classList.remove("hidden");
+        spinner.classList.add("inline");
+        form.submit();
+    }
+
+    closeButton?.addEventListener("click", () => successDiv?.classList.add("hidden"));
+    submitButton.addEventListener("click", handleFormSubmit);
+    form.addEventListener("keypress", handleFormSubmit);
+</script>
+{% endblock %}

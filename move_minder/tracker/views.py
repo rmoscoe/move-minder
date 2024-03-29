@@ -315,7 +315,6 @@ class MoveUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     
     def get_success_url(self):
         url = reverse("tracker:move-detail", kwargs={'pk': self.get_object().id})
-        print(url)
         return url
 
     def get_form(self, form_class=None):
@@ -351,13 +350,37 @@ class MoveDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
         self.object.delete()
         return JsonResponse({ "success_url": self.success_url })
 
-class ParcelDetailView(SitemapMixin, LoginRequiredMixin, DetailView):
+class ParcelDetailView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Parcel
+    template_name = "tracker/parcel_detail.html"
+    form_class = ParcelStatusForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = ParcelStatusForm()
+        success = self.request.GET.get("success", None)
+        if success is not None:
+            context["success"] = success
         return context
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == f"Parcel Detail: {self.get_object().id}":
+                history.pop(i)
+                break
+        history.insert(0, { "name": f"Parcel Detail: {self.get_object().id}", "url": url})
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        url = reverse("tracker:parcel-detail", kwargs={'move_id': self.get_object().move_id.id, 'pk': self.get_object().id})
+        url += "?success=true"
+        return url
 
 class ParcelCreateView(SitemapMixin, LoginRequiredMixin, CreateView):
     model = Parcel
@@ -414,6 +437,37 @@ class ParcelStatusUpdateView(SitemapMixin, LoginRequiredMixin, SingleObjectMixin
 class ParcelUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
     model = Parcel
     fields = ["type", "room", "contents", "photo", "weight", "status"]
+    template_name = "tracker/parcel_update.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        move_id = self.kwargs.get("move_id")
+        context["move"] = get_object_or_404(Move, pk=move_id)
+        return context
+
+    def get_success_url(self):
+        url = reverse("tracker:parcel-detail", kwargs={'move_id': self.kwargs['move_id'], 'pk': self.get_object().id})
+        return url
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.request = self.request
+        return form
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == f"Edit Parcel: {self.kwargs['pk']}":
+                history.pop(i)
+                break
+        history.insert(0, { "name": f"Edit Parcel: {self.kwargs['pk']}", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
 
 class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Parcel

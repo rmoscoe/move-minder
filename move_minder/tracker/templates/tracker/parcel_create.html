@@ -9,35 +9,37 @@ New Parcel |
 
 {% block main %}
 <div class="my-2 sm:my-3 md:mx-auto md:my-8 md:p-8 lg:p-12 xl:p-16 w-full">
-    <div id="camera-div" class="absolute w-screen h-screen top-0 left-0 lg:w-[80vw] lg:h-[80vh] lg:top-[10vh] lg:left-[10vw] xl:w-[70vw] xl:h-[70vh] xl:left-[15vw] xl:top-[15vh] 2xl:w-[60vw] 2xl:h-[60vh] 2xl:top-[20vh] 2xl:left-[20vw] hidden bg-white dark:bg-slate-900 z-40">
-        <div class="flex justify-end p-3 md:p-4 lg:p-6 xl:p-8 w-full">
-            <button id="close-camera-button" class="btn-square primary opacity-70">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="w-full relative">
-            <video id="camera-feed" autoplay class="w-full h-full object-cover"></video>
-            <canvas id="canvas" class="hidden w-full h-full object-cover"></canvas>
-        </div>
-        <div id="camera-controls" class="grid-cols-3 p-3 md:p-4 lg:p-6 xl:p-8 w-full items-center">
-            <div class="flex justify-center items-center">
-                <button id="snap-button" class="col-start-2 size-8 sm:size-9 md:size-10 xl:size-11 rounded-full ring-1 md:ring-2 ring-offset-2 lg:ring-offset-4 ring-slate-700 bg-slate-700 dark:ring-slate-200 dark:bg-slate-200 hover:bg-slate-100 hover:ring-slate-100 dark:hover:bg-slate-600 dark:hover:ring-slate-600"></button>
-            </div>
-            <div class="flex justify-end items-center">
-                <button id="flip-button" class="btn-square cool">
-                    <i class="fa-solid fa-rotate"></i>
+    <div id="camera-div" class="absolute w-screen h-full top-0 left-0 right-0 bottom-0 hidden bg-white dark:bg-slate-900 z-40 overflow-auto">
+        <div class="w-screen h-screen top-0 left-0 lg:w-[90vw] mx-auto">
+            <div class="flex justify-end py-3 md:py-4 lg:py-6 xl:py-8 w-full">
+                <button id="close-camera-button" class="btn-square primary opacity-70">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-        </div>
-        <div id="canvas-controls" class="hidden p-3 md:p-4 lg:p-6 xl:p-8 w-full justify-between items-center">
-            <button id="try-again-button" class="btn primary space-x-2">
-                <i class="fa-solid fa-rotate-left"></i>
-                <span>Try Again</span>
-            </button>
-            <button id="save-button" class="btn success space-x-2">
-                <i class="fa-regular fa-circle-check"></i>
-                <span>Save</span>
-            </button>
+            <div class="w-full relative">
+                <video id="camera-feed" autoplay class="w-full h-full object-cover"></video>
+                <canvas id="canvas" class="hidden w-full h-full object-cover"></canvas>
+            </div>
+            <div id="camera-controls" class="grid grid-cols-3 px-3 pt-6 pb-12 w-full items-center bg-white dark:bg-slate-900">
+                <div class="flex justify-center items-center col-start-2">
+                    <button id="snap-button" class="col-start-2 size-8 sm:size-9 md:size-10 xl:size-11 rounded-full ring-1 md:ring-2 ring-offset-2 lg:ring-offset-4 ring-slate-700 bg-slate-700 dark:ring-slate-200 dark:bg-slate-200 hover:bg-slate-500 hover:ring-slate-500 dark:hover:bg-slate-400 dark:hover:ring-slate-400"></button>
+                </div>
+                <div class="flex justify-end items-center">
+                    <button id="flip-button" class="btn-square cool">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="canvas-controls" class="hidden p-3 md:p-4 lg:p-6 xl:p-8 w-full justify-between items-center">
+                <button id="try-again-button" class="btn primary space-x-2">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>Try Again</span>
+                </button>
+                <button id="save-button" class="btn success space-x-2">
+                    <i class="fa-regular fa-circle-check"></i>
+                    <span>Save</span>
+                </button>
+            </div>
         </div>
     </div>
     <form id="create-parcel-form" method="post" class="form-grid my-2 sm:my-3 mx-0 md:mx-auto md:my-8 rounded-md lg:rounded-lg box p-4 md:p-8 lg:p-12 xl:p-16 w-full md:w-4/5 lg:w-2/3 xl:w-1/2 box-border space-y-4 lg:space-y-6" enctype="multipart/form-data">
@@ -240,6 +242,7 @@ New Parcel |
         cameraFeed.classList.add("hidden");
         canvas.classList.remove("hidden");
         canvasControls.classList.remove("hidden");
+        canvasControls.classList.add("flex");
     });
 
     flipButton.addEventListener("click", (event) => {
