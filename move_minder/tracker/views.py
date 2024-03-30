@@ -471,7 +471,15 @@ class ParcelUpdateView(SitemapMixin, LoginRequiredMixin, UpdateView):
 
 class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
     model = Parcel
-    success_url = reverse_lazy("move-detail")
+
+    def get_success_url(self):
+        url = reverse("tracker:move-detail", kwargs={"pk": self.kwargs["move_id"]})
+        return url
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse({ "success_url": self.get_success_url() })
 
 class ParcelScanView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name="tracker/parcel-scan.html"
