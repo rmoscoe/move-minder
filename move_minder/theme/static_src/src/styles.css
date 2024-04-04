@@ -183,3 +183,11 @@ td.link {
 td > a {
     @apply sm:px-1 md:px-2;
 }
+
+.label-grid > :nth-child(4n + 1), .label-grid > :nth-child(4n + 2) {
+    margin-bottom:.5in;
+}
+
+.label-grid > :nth-child(4n - 1), .label-grid > :nth-child(4n) {
+    margin-bottom:0;
+}

@@ -1,4 +1,4 @@
-{% load static tailwind_tags %}
+{% load static tailwind_tags phone %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -18,8 +18,11 @@
         <style>
             @media print {
                 @page {
-                    size: 8.5in 11in;
-                    margin:0;
+                    size: landscape;
+                    margin-top: 0.5in;
+                    margin-bottom: 0.5in;
+                    margin-left: 0.43in;
+                    margin-right: 0.42in;
                 }
             }
         </style>
@@ -31,16 +34,74 @@
             }
         </script>
     </head>
-    <body class="h-[11in] w-[8.5in]">
+    <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <main class="mx-[.5in] mt-[.43in] mb-[.42in] gap-x-[.5in] gap-y-[.15in] flex flex-wrap">
-            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
-            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
-            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
-            <section class="border border-slate-700 h-[5in] w-[3.5in] box-border rounded-md"></section>
+        <main class="label-grid gap-x-[.15in] grid grid-cols-2">
+            {% if parcels %}
+                {% for parcel in parcels %}
+                <section class="border border-slate-300 h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
+                    <img src="{{ parcel.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:scan-parcel'}?parcel={{ parcel.id }}" class="size-48" />
+                    <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl invisible">
+                        <p class="addr-text">{{ parcel.move_id.primary_user.first_name }} {{ parcel.move_id.primary_user.last_name }}</p>
+                        <p class="addr-text">{{ parcel.move_id.destination_address1 }}</p>
+                        {% if parcel.move_id.destination_address2 %}
+                        <p class="addr-text">{{ parcel.move_id.destination_address2 }}</p>
+                        {% endif %}
+                        <p class="addr-text">{{ parcel.move_id.destination_city }}, {{ parcel.move_id.destination_state_province }}  {{ parcel.move_id.destination_postal_code }}</p>
+                        <p class="addr-text">{{ parcel.move_id.destination_country }}</p>
+                        <p class="addr-text">{{ parcel.move_id.primary_user.userprofile.phone|phone }}</p>
+                    </div>
+                    <div class="text-container whitespace-nowrap overflow-hidden text-5xl col-span-2">
+                        <p class="text-element text-center">{{ parcel.room }}</p>
+                    </div>
+                </section>
+                {% endfor %}
+            {% elif object.qr_code %}
+            <section class="border border-slate-300 h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
+                <img src="{{ object.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:scan-parcel'}?parcel={{ object.id }}" class="size-48" />
+                <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl invisible">
+                    <p class="addr-text">{{ object.move_id.primary_user.first_name }} {{ object.move_id.primary_user.last_name }}</p>
+                    <p class="addr-text">{{ object.move_id.destination_address1 }}</p>
+                    {% if object.move_id.destination_address2 %}
+                    <p class="addr-text">{{ object.move_id.destination_address2 }}</p>
+                    {% endif %}
+                    <p class="addr-text">{{ object.move_id.destination_city }}, {{ object.move_id.destination_state_province }}  {{ object.move_id.destination_postal_code }}</p>
+                    <p class="addr-text">{{ object.move_id.destination_country }}</p>
+                    <p class="addr-text">{{ object.move_id.primary_user.userprofile.phone|phone }}</p>
+                </div>
+                <div class="text-container whitespace-nowrap overflow-hidden text-5xl col-span-2">
+                    <p class="text-element text-center">{{ object.room }}</p>
+                </div>
+            </section>
+            {% else %}
+            <p>No labels to print.</p>
+            {% endif %}
         </main>
-        <script src="" async defer></script>
+        <script>
+            window.addEventListener("DOMContentLoaded", () => {
+                const addrContainers = document.querySelectorAll(".address");
+                const textContainers = document.querySelectorAll(".text-container");
+                addrContainers.forEach(container => {
+                    const addrText = container.querySelectorAll(".addr-text");
+                    addrText.forEach(text => {
+                        while (text.scrollWidth > container.offsetWidth || text.scrollHeight > container.offsetHeight) {
+                            const currentFontSize = parseFloat(window.getComputedStyle(text).fontSize);
+                            const fontSize = currentFontSize - 1;
+                            container.style.fontSize = fontSize + "px";
+                        }
+                    });
+                    container.classList.remove("invisible");
+                });
+                textContainers.forEach(container => {
+                    const text = container.querySelector(".text-element");
+                    while (text.scrollWidth > container.offsetWidth || text.scrollHeight > container.offsetHeight) {
+                        const currentFontSize = parseFloat(window.getComputedStyle(text).fontSize);
+                        container.style.fontSize = (currentFontSize - 1) + "px";
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

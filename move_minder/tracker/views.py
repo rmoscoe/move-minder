@@ -487,6 +487,11 @@ class ParcelScanView(SitemapMixin, LoginRequiredMixin, TemplateView):
 class LabelPreview(TemplateView):
     template_name="tracker/labels.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['parcels'] = Parcel.objects.all()
+        return context
+
 class ShipParcelsView(View):
     def patch(self, request, *args, **kwargs):
         try:
