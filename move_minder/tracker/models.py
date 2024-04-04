@@ -1,7 +1,13 @@
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.db import models
 from django.db.models import Model
+from django.urls import reverse
+from io import BytesIO
 from phonenumber_field.modelfields import PhoneNumberField
+from PIL import Image, ImageDraw
+import qrcode
 from .utils import validate_postal_code
 
 # Create your models here.
@@ -138,5 +144,27 @@ class Parcel(Model):
     photo = models.ImageField(upload_to='images/', max_length=255, null=True, blank=True)
     weight = models.FloatField(blank=True, null=True, help_text="Optionally, enter the weight of the parcel in pounds.")
     status = models.CharField(max_length=12, choices={choice: choice for choice in status_choices}, default="Packed")
+    qr_code = models.ImageField(upload_to='images/', max_length=255, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        url = f"{settings.BASE_URL}{reverse('tracker:parcel-scan')}?parcel={self.id}"
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=8,
+            border=4
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+        qrcode_img = qr.make_image(fill_color="black", back_color="white")
+        canvas = Image.new("RGB", (296, 296), "white")
+        draw = ImageDraw.Draw(canvas)
+        canvas.paste(qrcode_img)
+        fname = f"qr_code-{self.id}.png"
+        buffer = BytesIO()
+        canvas.save(buffer, 'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+        canvas.close()
+        super().save(*args, **kwargs)

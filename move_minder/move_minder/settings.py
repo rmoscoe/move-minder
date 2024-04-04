@@ -33,6 +33,7 @@ DEBUG = os.environ.get('ENV') == 'DEV'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+BASE_URL = "http://localhost:8000" if DEBUG else ""
 
 # Application definition
 
