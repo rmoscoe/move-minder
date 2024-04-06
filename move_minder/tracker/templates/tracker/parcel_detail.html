@@ -12,6 +12,9 @@ Parcel: {{ object.id }} |
     <div class="box w-full flex justify-between items-center mt-4 mb-2 py-1 px-2">
         <a href="{% url 'tracker:move-detail' object.move_id.id %}" class="hover:text-blue-500 dark:hover:text-blue-600 visited:text-violet-500 dark:visited:text-violet-600 underline">{{ object.move_id.nickname}}: Move Detail</a>
         <div class="space-x-2 flex">
+            <button id="info-button" class="btn-square cool">
+                <i class="fa-solid fa-circle-info"></i>
+            </button>
             <button id="print-label-button" class="btn-square cool">
                 <i class="fa-solid fa-print"></i>
             </button>
@@ -50,6 +53,19 @@ Parcel: {{ object.id }} |
             </footer>
         </section>
     </div>
+
+    <section id="label-info" class="hidden relative w-full card my-3 md:my-4 transition">
+        <button id="hide-info" class="absolute top-0.5 right-0.5 size-7 rounded-full box hover:bg-slate-100 dark:hover:bg-slate-600">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="flex flex-nowrap space-x-4 lg:space-x-6 items-center">
+            <div class="size-10 shrink-0 rounded-full border-[3px] border-slate-500 dark:border-slate-400 flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6 fill-slate-500 dark:fill-slate-400" viewBox="0 0 192 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M48 80a48 48 0 1 1 96 0A48 48 0 1 1 48 80zM0 224c0-17.7 14.3-32 32-32H96c17.7 0 32 14.3 32 32V448h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H64V256H32c-17.7 0-32-14.3-32-32z"/></svg>
+            </div>
+            <p>Labels are designed to be compatible with <a href= "https://www.avery.com/blank/labels/94256" class="text-blue-600 dark:text-blue-500 hover:underline hover:text-blue-500 dark:hover:text-blue-400 visited:violet-600 dark:visited:violet-500" target="blank">Avery 5" x 3 1/2" labels</a> (SKU 94256).</p>
+        </div>
+    </section>
+    <iframe id="label-iframe" class="absolute -left-[9999px] -top-[9999px] print:block" src="{% url 'tracker:label-preview' %}?pk={{ object.id }}&move_id={{ object.move_id.id }}" height="816" width="1056" ></iframe>
 
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
         <section class="card">
@@ -107,17 +123,16 @@ Parcel: {{ object.id }} |
                         </tr>
                         <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
                             <th scope="row" class="box text-start border px-1 border-slate-400 dark:border-slate-500">Room</th>
-                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{{ object.room }}</td>
+                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{% if object.room %}{{ object.room }}{% endif %}</td>
                         </tr>
                         <tr class="px-1 sm:px-2 lg:px-3 sm:py-1 lg:py-2">
                             <th scope="row" class="box text-start border px-1 border-slate-400 dark:border-slate-500">Weight</th>
-                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{{ object.weight }} lbs.</td>
+                            <td class="text-start border px-1 border-slate-400 dark:border-slate-500">{% if object.weight %}{{ object.weight }} lbs.{% endif %}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
-        <img src="{{ object.qr_code.url }}" class="size-48"/>
     </section>
 </div>
 <script>
@@ -135,6 +150,11 @@ Parcel: {{ object.id }} |
     const deleteSpinner = document.getElementById("delete-spinner");
     const wText = document.getElementById("warning-text");
     const eText = document.getElementById("error-text");
+    const infoButton = document.getElementById("info-button");
+    const hideInfo = document.getElementById("hide-info");
+    const infoSection = document.getElementById("label-info");
+    const labels = document.getElementById("label-iframe");
+    const printButton = document.getElementById("print-label-button");
 
     const handleFormSubmit = (event) => {
         if (event.key && event.key === "Enter") {
@@ -210,5 +230,12 @@ Parcel: {{ object.id }} |
     hideSuccess?.addEventListener("click", () => successDiv?.classList.add("hidden"));
     submitButton.addEventListener("click", handleFormSubmit);
     form.addEventListener("keypress", handleFormSubmit);
+
+    infoButton.addEventListener("click", () => infoSection.classList.remove("hidden"));
+    hideInfo.addEventListener("click", () => infoSection.classList.add("hidden"));
+
+    printButton.addEventListener("click", () => {
+        labels.contentWindow.print();
+    });
 </script>
 {% endblock %}

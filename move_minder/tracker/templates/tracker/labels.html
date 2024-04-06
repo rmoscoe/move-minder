@@ -38,12 +38,12 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <main class="label-grid gap-x-[.15in] grid grid-cols-2">
+        <main class="label-grid gap-x-[.15in] grid grid-cols-2 bg-white">
             {% if parcels %}
                 {% for parcel in parcels %}
-                <section class="border border-slate-300 h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
+                <section class="h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
                     <img src="{{ parcel.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:scan-parcel'}?parcel={{ parcel.id }}" class="size-48" />
-                    <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl invisible">
+                    <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl h-48 box-border invisible">
                         <p class="addr-text">{{ parcel.move_id.primary_user.first_name }} {{ parcel.move_id.primary_user.last_name }}</p>
                         <p class="addr-text">{{ parcel.move_id.destination_address1 }}</p>
                         {% if parcel.move_id.destination_address2 %}
@@ -53,13 +53,19 @@
                         <p class="addr-text">{{ parcel.move_id.destination_country }}</p>
                         <p class="addr-text">{{ parcel.move_id.primary_user.userprofile.phone|phone }}</p>
                     </div>
-                    <div class="text-container whitespace-nowrap overflow-hidden text-5xl col-span-2">
-                        <p class="text-element text-center">{{ parcel.room }}</p>
+                    <div class="text-container whitespace-nowrap overflow-hidden text-5xl col-span-2 min-h-8 max-h-12 my-2">
+                        <p class="text-element text-center">{% if parcel.room %}{{ parcel.room }}{% endif %}</p>
+                    </div>
+                    <div class="text-container whitespace-nowrap overflow-hidden flex items-end max-h-16">
+                        <p class="text-element text-2xl">{{ parcel.type }}</p>
+                    </div>
+                    <div class="overflow-hidden max-h-16 flex items-end">
+                        <p class="text-sm text-ellipsis mt-auto ml-auto h-fit w-fit">{% if parcel.contents %}{{ parcel.contents|linebreaksbr }} {% endif %}<p>
                     </div>
                 </section>
                 {% endfor %}
             {% elif object.qr_code %}
-            <section class="border border-slate-300 h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
+            <section class="h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
                 <img src="{{ object.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:scan-parcel'}?parcel={{ object.id }}" class="size-48" />
                 <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl invisible">
                     <p class="addr-text">{{ object.move_id.primary_user.first_name }} {{ object.move_id.primary_user.last_name }}</p>
@@ -71,8 +77,14 @@
                     <p class="addr-text">{{ object.move_id.destination_country }}</p>
                     <p class="addr-text">{{ object.move_id.primary_user.userprofile.phone|phone }}</p>
                 </div>
-                <div class="text-container whitespace-nowrap overflow-hidden text-5xl col-span-2">
-                    <p class="text-element text-center">{{ object.room }}</p>
+                <div class="text-container whitespace-nowrap overflow-hidden text-5xl col-span-2 min-h-8 max-h-12 my-2">
+                    <p class="text-element text-center">{% if object.room %}{{ object.room }}{% endif %}</p>
+                </div>
+                <div class="text-container whitespace-nowrap overflow-hidden flex items-end max-h-16">
+                    <p class="text-element text-2xl">{{ object.type }}</p>
+                </div>
+                <div class="overflow-hidden max-h-16 flex items-end">
+                    <p class="text-sm text-ellipsis mt-auto ml-auto h-fit w-fit">{% if object.contents %}{{ object.contents|linebreaksbr }}{% endif %}<p>
                 </div>
             </section>
             {% else %}

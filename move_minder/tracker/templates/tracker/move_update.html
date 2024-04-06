@@ -84,8 +84,9 @@ Edit Move: {{ object.nicnkame }} |
                 </ul>
             </div>
         {% endif %}
-        <div class="pt-3 w-full">
-            <input type="submit" value="Submit" class="ml-auto btn primary" />
+        <div class="pt-3 w-full flex justify-between">
+            <a href="{% url 'tracker:move-detail' object.id %}" class="btn primary subtle">Cancel</a>
+            <input type="submit" value="Submit" class="btn primary" />
         </div>
     </form>
 </div>

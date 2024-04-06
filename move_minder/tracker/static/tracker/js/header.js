@@ -12,7 +12,6 @@ hamburger?.addEventListener("click", () => {
 });
 
 themeToggler.addEventListener("click", () => {
-    console.log("changing theme")
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         localStorage.theme = "light";
         document.documentElement.classList.remove("dark");

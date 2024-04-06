@@ -489,7 +489,12 @@ class LabelPreview(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['parcels'] = Parcel.objects.all()
+        move_id = self.request.GET.get('move_id', None)
+        pk = self.request.GET.get('pk', None)
+        if move_id is None:
+            context['parcels'] = Parcel.objects.filter(move_id=pk)
+        else:
+            context['object'] = Parcel.objects.get(pk=pk)
         return context
 
 class ShipParcelsView(View):
