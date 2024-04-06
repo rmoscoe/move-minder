@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ParcelScanView, LabelPreview, ShipParcelsView
+from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ReceivingView, LabelPreview, ShipParcelsView, EndReceivingView
 
 app_name = "tracker"
 
@@ -22,7 +22,8 @@ urlpatterns = [
     path("moves/<int:pk>/parcels/new/", ParcelCreateView.as_view(), name="parcel-create"),
     path("moves/<int:move_id>/parcels/<int:pk>/edit/", ParcelUpdateView.as_view(), name="parcel-update"),
     path("moves/<int:move_id>/parcels/<int:pk>/delete/", ParcelDeleteView.as_view(), name="parcel-delete"),
-    path("parcels/scan/", ParcelScanView.as_view(), name="parcel-scan"),
+    path("parcels/receiving/", ReceivingView.as_view(), name="receiving"),
     path("labels/", LabelPreview.as_view(), name="label-preview"),
-    path("moves/<int:move_id>/parcels/bulk-ship", ShipParcelsView.as_view(), name="bulk-ship")
+    path("moves/<int:move_id>/parcels/bulk-ship/", ShipParcelsView.as_view(), name="bulk-ship"),
+    path("moves/<int:move_id>/end-receiving/", EndReceivingView.as_view(), name="end-receiving")
 ]

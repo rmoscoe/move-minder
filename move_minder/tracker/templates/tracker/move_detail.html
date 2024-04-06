@@ -12,12 +12,18 @@ Move: {{ object.nickname }} |
     <div class="box mt-4 mb-2 p-2 flex flex-wrap sm:flex-nowrap justify-between items-center">
         <h3>Move Detail</h3>
         <div class="flex justify-between flex-nowrap space-x-2 lg:space-x-3">
-            <a href="{% url 'tracker:move-update' move.id %}" class="btn-square cool">
-                <i class="fa-solid fa-pencil"></i>
-            </a>
-            <button id="delete-button" class="btn-square cool">
-                <i class="fa-solid fa-trash-can"></i>
-            </button>
+            <div class="group relative">
+                <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Edit Move</span>
+                <a href="{% url 'tracker:move-update' move.id %}" class="btn-square cool">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
+            </div>
+            <div class="group relative">
+                <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Delete Move</span>
+                <button id="delete-button" class="btn-square cool">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -119,23 +125,45 @@ Move: {{ object.nickname }} |
         <div class="box mt-4 sm:mt-6 lg:mt-8 mb-2 p-2 flex flex-wrap sm:flex-nowrap justify-between items-center">
             <h4>Parcels</h4>
             <div class="flex justify-between flex-nowrap space-x-2 lg:space-x-3">
-                <a href="{% url 'tracker:parcel-create' move.id %}" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
-                    <i class="fa-solid fa-plus"></i>
-                </a>
+                <div class="group relative">
+                    <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Add Parcel</span>
+                    <a href="{% url 'tracker:parcel-create' move.id %}" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
                 {% if parcels %}
-                <button id="info-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
-                    <i class="fa-solid fa-circle-info"></i>
-                </button>
-                <button id="print-labels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
-                    <i class="fa-solid fa-print"></i>
-                </button>
-                <button id="ship-all-parcels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
-                    <i id="bulk-ship-icon" class="fa-solid fa-truck-arrow-right"></i>
-                    <svg id="bulk-ship-spinner" class="hidden animate-spin -ml-1 h-3.5 w-3.5 mr-3 -mb-2 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
+                <div class="group relative">
+                    <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Info</span>
+                    <button id="info-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                </div>
+                <div class="group relative">
+                    <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Print Labels</span>
+                    <button id="print-labels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                        <i class="fa-solid fa-print"></i>
+                    </button>
+                </div>
+                <div class="group relative">
+                    <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Bulk Ship</span>
+                    <button id="ship-all-parcels-button" class="btn-square cool w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 2xl:w-10 2xl:h-10">
+                        <i id="bulk-ship-icon" class="fa-solid fa-truck-arrow-right"></i>
+                        <svg id="bulk-ship-spinner" class="hidden animate-spin -ml-1 h-3.5 w-3.5 mr-3 -mb-2 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="group relative">
+                    <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">End Receiving</span>
+                    <button id="end-receiving-button" class="btn-square cool size-6 md:size-7 lg:size-8 2xl:size-10">
+                        <i id="end-receiving-icon" class="fa-regular fa-circle-check"></i>
+                        <svg id="end-receiving-spinner" class="hidden animate-spin -ml-1 h-3.5 w-3.5 mr-3 -mb-2 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -149,11 +177,15 @@ Move: {{ object.nickname }} |
             <button id="hide-info" class="absolute top-0.5 right-0.5 size-7 rounded-full box hover:bg-slate-100 dark:hover:bg-slate-600">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="flex flex-nowrap space-x-4 lg:space-x-6 items-center">
+            <div class="flex flex-nowrap space-x-4 lg:space-x-6">
                 <div class="size-10 shrink-0 rounded-full border-[3px] border-slate-500 dark:border-slate-400 flex justify-center items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-6 fill-slate-500 dark:fill-slate-400" viewBox="0 0 192 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M48 80a48 48 0 1 1 96 0A48 48 0 1 1 48 80zM0 224c0-17.7 14.3-32 32-32H96c17.7 0 32 14.3 32 32V448h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H64V256H32c-17.7 0-32-14.3-32-32z"/></svg>
                 </div>
-                <p>Labels are designed to be compatible with <a href= "https://www.avery.com/blank/labels/94256" class="text-blue-600 dark:text-blue-500 hover:underline hover:text-blue-500 dark:hover:text-blue-400 visited:violet-600 dark:visited:violet-500" target="blank">Avery 5" x 3 1/2" labels</a> (SKU 94256).</p>
+                <div class="space-y-2">
+                    <p><strong>Print: </strong>Prints labels for all parcels. Labels are designed to be compatible with <a href= "https://www.avery.com/blank/labels/94256" class="text-blue-600 dark:text-blue-500 hover:underline hover:text-blue-500 dark:hover:text-blue-400 visited:violet-600 dark:visited:violet-500" target="blank">Avery 5" x 3 1/2" labels</a> (SKU 94256).</p>
+                    <p><strong>Bulk Ship: </strong>Sets the status of all "Packed" parcels to "In Transit." Intended for use when turning over all parcels to movers or when loading all parcels into your vehicle.</p>
+                    <p><strong>End Receiving: </strong>Sets the status of all parcels not "Received," "Damaged," or "Accepted" to "Lost". Intended for use after scanning all parcels received from movers or unloaded from your vehicle.</p>
+                </div>
             </div>
         </section>
         <iframe id="label-iframe" class="absolute -left-[9999px] -top-[9999px] print:block" src="{% url 'tracker:label-preview' %}?pk={{ object.id }}" height="816" width="1056" ></iframe>
@@ -230,6 +262,7 @@ Move: {{ object.nickname }} |
     const infoSection = document.getElementById("label-info");
     const labels = document.getElementById("label-iframe");
     const printButton = document.getElementById("print-labels-button");
+    const endReceivingButton = document.getElementById("end-receiving-button");
 
     const hideModal = () => {
         if (wText.classList.contains("hidden")) {
@@ -309,7 +342,6 @@ Move: {{ object.nickname }} |
 
         if (response.status === 200) {
             const data = await response.json();
-            console.log(data);
             for (let i = 0; i < data.length; i++) {
                 const statusField = document.getElementById(`status-${data[i].id}`);
                 if (statusField) {
@@ -337,5 +369,41 @@ Move: {{ object.nickname }} |
     printButton.addEventListener("click", () => {
         labels.contentWindow.print();
     });
+
+    endReceivingButton.addEventListener("click", async () => {
+        endReceivingButton.setAttribute("disabled", true);
+        const spinner = document.getElementById("end-receiving-spinner");
+        const icon = document.getElementById("end-receiving-icon");
+
+        icon.classList.add("hidden");
+        spinner.classList.remove("hidden");
+
+        const csrfToken = document.querySelector("input[type='hidden']");
+        const csrf = csrfToken.value;
+
+        const response = await fetch("{% url 'tracker:end-receiving' move.id %}", {
+            method: "PATCH",
+            headers: {
+                "X-CSRFToken": csrf
+            }
+        });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            for (let i = 0; i < data.length; i++) {
+                const statusField = document.getElementById(`status-${data[i].id}`);
+                if (statusField) {
+                    statusField.textContent = data[i].status;
+                }
+            }
+            endReceivingButton.removeAttribute("disabled");
+        } else {
+            errorMsg.classList.remove("hidden");
+            errorMsg.classList.add("flex");
+        }
+
+        spinner.classList.add("hidden");
+        icon.classList.remove("hidden");
+    })
 </script>
 {% endblock %}

@@ -149,7 +149,7 @@ class Parcel(Model):
     last_modified = models.DateTimeField(auto_now=True, blank=True)
 
     def save(self, *args, **kwargs):
-        url = f"{settings.BASE_URL}{reverse('tracker:parcel-scan')}?parcel={self.id}"
+        url = f"{settings.BASE_URL}{reverse('tracker:receiving')}?parcel={self.id}"
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,

@@ -14,7 +14,7 @@ class StaticViewSitemap(sitemaps.Sitemap):
         self.current_site = current_site
 
     def items(self):
-        return ["tracker:home", "tracker:sign-up", "tracker:login", "tracker:dashboard", "tracker:parcel-scan"]
+        return ["tracker:home", "tracker:sign-up", "tracker:login", "tracker:dashboard", "tracker:receiving"]
 
     def location(self, item):
         return reverse(item)

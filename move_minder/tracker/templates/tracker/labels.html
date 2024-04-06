@@ -42,7 +42,7 @@
             {% if parcels %}
                 {% for parcel in parcels %}
                 <section class="h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
-                    <img src="{{ parcel.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:scan-parcel'}?parcel={{ parcel.id }}" class="size-48" />
+                    <img src="{{ parcel.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:receiving'}?parcel={{ parcel.id }}" class="size-48" />
                     <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl h-48 box-border invisible">
                         <p class="addr-text">{{ parcel.move_id.primary_user.first_name }} {{ parcel.move_id.primary_user.last_name }}</p>
                         <p class="addr-text">{{ parcel.move_id.destination_address1 }}</p>
@@ -66,7 +66,7 @@
                 {% endfor %}
             {% elif object.qr_code %}
             <section class="h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
-                <img src="{{ object.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:scan-parcel'}?parcel={{ object.id }}" class="size-48" />
+                <img src="{{ object.qr_code.url }}" alt="http://localhost:8000{% url 'tracker:receiving'}?parcel={{ object.id }}" class="size-48" />
                 <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl invisible">
                     <p class="addr-text">{{ object.move_id.primary_user.first_name }} {{ object.move_id.primary_user.last_name }}</p>
                     <p class="addr-text">{{ object.move_id.destination_address1 }}</p>

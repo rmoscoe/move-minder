@@ -18,10 +18,10 @@
     </section>
     {% if user.is_authenticated %}
         <nav class="hidden lg:flex lg:flex-nowrap text-xl text-slate-900 dark:text-slate-200 md:justify-around lg:items-end space-x-4 lg:space-x-5 xl:space-x-6">
-            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/dashboard/">Dashboard</a>
-            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/moves/">My Moves</a>
-            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/moves/new/">Create New Move</a>
-            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="/parcels/scan/">Scan Parcels</a>
+            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="{% url 'tracker:dashboard' %}">Dashboard</a>
+            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="{% url 'tracker:moves-list' %}">My Moves</a>
+            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="{% url 'tracker:move-create' %}">Create New Move</a>
+            <a class="block mt-4 cursor-pointer hover:text-slate-800 hover:underline dark:hover:text-white" href="{% url 'tracker:receiving' %}">Receiving</a>
         </nav>
     {% endif %}
     <section class="relative flex flex-no-wrap justify-between space-x-2 md:space-x-4 md:text-2xl px-2 items-center text-lg sm:text-xl">
@@ -33,8 +33,8 @@
             <button id="account-menu">
                 <i class="fa-regular fa-user text-slate-800 dark:text-slate-200 hover:text-slate-700 dark:hover:text-white"></i>
             </button>
-            <div id="account-menu-content" class="hidden absolute right-0 top-full light-card space-y-3 md:space-y-4 xl:space-y-5 min-w-max text-center dark:dark-card">
-                <a class="block w-full hover:text-slate-400 hover:underline dark:hover:text-slate-200" href="/users/{{ user.id }}/edit/">My Profile</a>
+            <div id="account-menu-content" class="hidden absolute right-0 top-full card space-y-3 md:space-y-4 xl:space-y-5 min-w-max text-center card">
+                <a class="block w-full hover:text-slate-400 hover:underline dark:hover:text-slate-200" href="{% url 'tracker:edit-profile' user.id %}">My Profile</a>
                 <form id="logout-form" method="post" action="{% url 'tracker:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="block w-full hover:text-slate-400 hover:underline dark:hover:text-slate-200">Logout</button>
@@ -59,10 +59,10 @@
             <hr class="mb-2"/>
         </div>
         <div class="pl-4">
-            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/dashboard/">Dashboard</a>
-            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/moves/">My Moves</a>
-            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/moves/new/">Create New Move</a>
-            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="/parcels/scan/">Scan Parcels</a>
+            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="{% url 'tracker:dashboard' %}">Dashboard</a>
+            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="{% url 'tracker:moves-list' %}">My Moves</a>
+            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="{% url 'tracker:move-create' %}">Create New Move</a>
+            <a class="block mt-4 cursor-pointer hover:text-white hover:bg-slate-700 dark:hover:text-slate-800 dark:hover:bg-slate-300" href="{% url 'tracker:receiving' %}">Receiving</a>
         </div>
     </aside>
 {% endif %}

@@ -12,18 +12,30 @@ Parcel: {{ object.id }} |
     <div class="box w-full flex justify-between items-center mt-4 mb-2 py-1 px-2">
         <a href="{% url 'tracker:move-detail' object.move_id.id %}" class="hover:text-blue-500 dark:hover:text-blue-600 visited:text-violet-500 dark:visited:text-violet-600 underline">{{ object.move_id.nickname}}: Move Detail</a>
         <div class="space-x-2 flex">
-            <button id="info-button" class="btn-square cool">
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
-            <button id="print-label-button" class="btn-square cool">
-                <i class="fa-solid fa-print"></i>
-            </button>
-            <a href="{% url 'tracker:parcel-update' object.move_id.id object.id %}" class="btn-square cool">
-                <i class="fa-solid fa-pencil"></i>
-            </a>
-            <button id="delete-button" class="btn-square cool">
-                <i class="fa-solid fa-trash-can"></i>
-            </button>
+            <div class="group relative">
+                <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Info</span>
+                <button id="info-button" class="btn-square cool">
+                    <i class="fa-solid fa-circle-info"></i>
+                </button>
+            </div>
+            <div class="group relative">
+                <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Print Label</span>
+                <button id="print-label-button" class="btn-square cool">
+                    <i class="fa-solid fa-print"></i>
+                </button>
+            </div>
+            <div class="group relative">
+                <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Edit Parcel</span>
+                <a href="{% url 'tracker:parcel-update' object.move_id.id object.id %}" class="btn-square cool">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
+            </div>
+            <div class="group relative">
+                <span class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 text-slate-300 px-2 py-1 opacity-0 transition before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-slate-900 before:content-[''] group-hover:opacity-100 dark:bg-white dark:text-slate-500 dark:before:border-t-white">Delete Parcel</span>
+                <button id="delete-button" class="btn-square cool">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -62,7 +74,9 @@ Parcel: {{ object.id }} |
             <div class="size-10 shrink-0 rounded-full border-[3px] border-slate-500 dark:border-slate-400 flex justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-6 fill-slate-500 dark:fill-slate-400" viewBox="0 0 192 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M48 80a48 48 0 1 1 96 0A48 48 0 1 1 48 80zM0 224c0-17.7 14.3-32 32-32H96c17.7 0 32 14.3 32 32V448h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H64V256H32c-17.7 0-32-14.3-32-32z"/></svg>
             </div>
-            <p>Labels are designed to be compatible with <a href= "https://www.avery.com/blank/labels/94256" class="text-blue-600 dark:text-blue-500 hover:underline hover:text-blue-500 dark:hover:text-blue-400 visited:violet-600 dark:visited:violet-500" target="blank">Avery 5" x 3 1/2" labels</a> (SKU 94256).</p>
+            <div class="space-y-2">
+                <p><strong>Print: </strong>Prints the label for this parcel. Labels are designed to be compatible with <a href= "https://www.avery.com/blank/labels/94256" class="text-blue-600 dark:text-blue-500 hover:underline hover:text-blue-500 dark:hover:text-blue-400 visited:violet-600 dark:visited:violet-500" target="blank">Avery 5" x 3 1/2" labels</a> (SKU 94256).</p>
+            </div>
         </div>
     </section>
     <iframe id="label-iframe" class="absolute -left-[9999px] -top-[9999px] print:block" src="{% url 'tracker:label-preview' %}?pk={{ object.id }}&move_id={{ object.move_id.id }}" height="816" width="1056" ></iframe>

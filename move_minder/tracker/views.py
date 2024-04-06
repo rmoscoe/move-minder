@@ -481,8 +481,8 @@ class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
         self.object.delete()
         return JsonResponse({ "success_url": self.get_success_url() })
 
-class ParcelScanView(SitemapMixin, LoginRequiredMixin, TemplateView):
-    template_name="tracker/parcel-scan.html"
+class ReceivingView(SitemapMixin, LoginRequiredMixin, TemplateView):
+    template_name="tracker/receiving.html"
 
 class LabelPreview(TemplateView):
     template_name="tracker/labels.html"
@@ -510,6 +510,31 @@ class ShipParcelsView(View):
                 for parcel in parcels:
                     ids.append(parcel.id)
                 parcels.update(status="In Transit")
+                parcel_list = []
+                qs = Parcel.objects.filter(move_id=move, id__in=ids)
+                for parcel in qs:
+                    parcel_dict = parcel.__dict__.copy()
+                    _ = parcel_dict.pop("_state")
+                    parcel_list.append(parcel_dict)
+            return JsonResponse(parcel_list, safe=False)
+        except Exception as e:
+            print(e)
+            return HttpResponse(e, status=500)
+
+class EndReceivingView(View):
+    def patch(self, request, *args, **kwargs):
+        try:
+            move_id = kwargs.get('move_id', None)
+            if move_id is None:
+                return HttpResponse("Move ID is required", status=400)
+            move = get_object_or_404(Move, pk=move_id)
+            status_list = ["Accepted", "Damaged", "Received", "Lost"]
+            parcels = Parcel.objects.filter(move_id=move).exclude(status__in=status_list)
+            ids = []
+            if len(parcels) > 0:
+                for parcel in parcels:
+                    ids.append(parcel.id)
+                parcels.update(status="Lost")
                 parcel_list = []
                 qs = Parcel.objects.filter(move_id=move, id__in=ids)
                 for parcel in qs:
