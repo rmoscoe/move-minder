@@ -484,6 +484,21 @@ class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
 class ReceivingView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name="tracker/receiving.html"
 
+    def get(self, request, *args, **kwargs):
+        url = reverse("tracker:receiving")
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == "Receiving":
+                history.pop(i)
+                break
+        history.insert(0, { "name": "Receiving", "url": url })
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+
 class LabelPreview(TemplateView):
     template_name="tracker/labels.html"
 
@@ -544,4 +559,27 @@ class EndReceivingView(View):
             return JsonResponse(parcel_list, safe=False)
         except Exception as e:
             print(e)
+            return HttpResponse(e, status=500)
+        
+class ReceiveParcelView(View):
+    def patch(self, request, *args, **kwargs):
+        try:
+            statuses = ["Received", "Damaged", "Accepted"]
+            parcel_id = request.GET.get("parcel", None)
+            if parcel_id is None:
+                return HttpResponse("Parcel ID is required", status=400)
+            
+            parcel = get_object_or_404(Parcel, pk=parcel_id)
+            status_json = request.body.get("status", None)
+            if status_json is None:
+                return HttpResponse("The request must include a body with a 'status' key", status=400)
+            
+            status = json.loads(status_json)
+            if status not in statuses:
+                return HttpResponse("Invalid status. Allowed options include 'Received', 'Damaged', or 'Accepted'.", status=400)
+            
+            parcel.update(status=status)
+            return HttpResponseRedirect(reverse("tracker:receiving"))
+
+        except Exception as e:
             return HttpResponse(e, status=500)

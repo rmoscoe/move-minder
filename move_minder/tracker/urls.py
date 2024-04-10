@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ReceivingView, LabelPreview, ShipParcelsView, EndReceivingView
+from .views import HomePageView, SignupView, CustomLoginView, UserUpdateView, DashboardView, UserListView, UserDetailView, MoveListView, MoveDetailView, MoveCreateView, MoveUpdateView, MoveDeleteView,ParcelDetailView, ParcelCreateView, ParcelUpdateView, ParcelDeleteView, ReceivingView, LabelPreview, ShipParcelsView, EndReceivingView, ReceiveParcelView
 
 app_name = "tracker"
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path("moves/<int:move_id>/parcels/<int:pk>/edit/", ParcelUpdateView.as_view(), name="parcel-update"),
     path("moves/<int:move_id>/parcels/<int:pk>/delete/", ParcelDeleteView.as_view(), name="parcel-delete"),
     path("parcels/receiving/", ReceivingView.as_view(), name="receiving"),
+    path("parcels/receiving/update-status/", ReceiveParcelView.as_view(), name="receive-parcel"),
     path("labels/", LabelPreview.as_view(), name="label-preview"),
     path("moves/<int:move_id>/parcels/bulk-ship/", ShipParcelsView.as_view(), name="bulk-ship"),
     path("moves/<int:move_id>/end-receiving/", EndReceivingView.as_view(), name="end-receiving")
