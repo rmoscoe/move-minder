@@ -484,6 +484,14 @@ class ParcelDeleteView(SitemapMixin, LoginRequiredMixin, DeleteView):
 class ReceivingView(SitemapMixin, LoginRequiredMixin, TemplateView):
     template_name="tracker/receiving.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        parcel_id = self.request.GET.get("parcel", None)
+        if parcel_id is not None:
+            parcel = Parcel.objects.filter(id=parcel_id)
+            context['parcel'] = parcel
+        return context
+
     def get(self, request, *args, **kwargs):
         url = reverse("tracker:receiving")
         user = User.objects.select_related("userprofile").get(id=request.user.id)
