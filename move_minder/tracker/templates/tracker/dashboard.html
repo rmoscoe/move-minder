@@ -7,7 +7,7 @@ Dashboard |
 {% block main %}
 <div class="px-4 lg:px-8 py-4 md:py-6 xl:py-8">
     <h2>Dashboard</h2>
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-16 mt-4 sm:mt-6 md:mt-8 lg:mt-12 xl:mt-16">
         <section class="card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Your Upcoming Moves</h3>
             <div class="h-full">
@@ -65,7 +65,7 @@ Dashboard |
         </section>
         <section class="card">
             <h3 class="text-center pb-3 border-b border-slate-400 dark:border-slate-600">Quick Access</h3>
-            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10 grid grid-cols-3 md:max-lg:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+            <div class="mt-4 sm:mt-5 md:mt-7 lg:mt-9 xl:mt-10 grid grid-cols-2 sm:max-md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
                 <a class="card hover:bg-slate-100 dark:hover:bg-slate-800 flex flex-nowrap items-center p-1 md:p-2 xl:p-3" href="{% url 'tracker:receiving' %}">
                     <div class="size-10 md:size-11 xl:size-12 rounded-full bg-red-500/80 p-1 md:p-2 xl:p-3 text-slate-200 md:text-lg text-center flex justify-center items-center flex-none">
                         <i class="fa-solid fa-qrcode mx-auto"></i>
@@ -99,7 +99,7 @@ Dashboard |
                     </div>
                     <div class="ml-3">
                         <p class="font-semibold mb-1">Edit Profile</p>
-                        <p class="text-xs">Edit your profile or change your password</p>
+                        <p class="text-xs">Edit your profile or password</p>
                     </div>
                 </a>
             </div>

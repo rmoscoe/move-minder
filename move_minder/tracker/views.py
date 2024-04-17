@@ -488,7 +488,7 @@ class ReceivingView(SitemapMixin, LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         parcel_id = self.request.GET.get("parcel", None)
         if parcel_id is not None:
-            parcel = Parcel.objects.filter(id=parcel_id)
+            parcel = Parcel.objects.get(pk=parcel_id)
             context['parcel'] = parcel
         return context
 
@@ -570,22 +570,27 @@ class EndReceivingView(View):
             return HttpResponse(e, status=500)
         
 class ReceiveParcelView(View):
-    def patch(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
+            print("Route hit")
             statuses = ["Received", "Damaged", "Accepted"]
-            parcel_id = request.GET.get("parcel", None)
+            parcel_id = kwargs.get("pk", None)
+            print(f"Parcel ID: {parcel_id}")
             if parcel_id is None:
                 return HttpResponse("Parcel ID is required", status=400)
             
-            parcel = get_object_or_404(Parcel, pk=parcel_id)
-            status_json = request.body.get("status", None)
-            if status_json is None:
+            parcel = Parcel.objects.filter(pk=parcel_id)
+            if parcel is None:
+                return HttpResponse("Invalid Parcel ID", status=404)
+            
+            status = request.POST.get("status", None)
+            if status is None:
                 return HttpResponse("The request must include a body with a 'status' key", status=400)
             
-            status = json.loads(status_json)
+            print(f"Status: {status}")
             if status not in statuses:
                 return HttpResponse("Invalid status. Allowed options include 'Received', 'Damaged', or 'Accepted'.", status=400)
-            
+            print("Updating status")
             parcel.update(status=status)
             return HttpResponseRedirect(reverse("tracker:receiving"))
 
