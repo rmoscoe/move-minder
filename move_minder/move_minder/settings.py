@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'tracker',
     'theme',
     'django_browser_reload',
-    'fontawesomefree'
+    'fontawesomefree',
+    'pwa'
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -162,10 +163,10 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = f'{BASE_DIR}/static'
+STATIC_ROOT = f'{BASE_DIR}/move_minder/static'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "tracker/static",
+    "move_minder/tracker/static",
     "move_minder/theme/static"
 ]
 
@@ -189,6 +190,47 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_ID = 1
 DOMAIN = os.environ.get('DOMAIN')
 
-#PhoneNumberField
+# PhoneNumberField
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 PHONENUMBER_DEFAULT_REGION = "US"
+
+# Progressive Web App (django-pwa)
+
+PWA_APP_NAME = 'MoveMinder'
+PWA_APP_DESCRIPTION = "Organize | Track | Recover :: Create a record for each box or bag documenting what it contains. Scan the QR code on each label to quickly update the status of the item. In the unfortunate event that something does not reach the destination, you may be able to recover certain costs from your moving company."
+PWA_APP_THEME_COLOR = '#0f172a'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': f"{STATIC_URL}images/app_icon.png",
+        'sizes': '160x160'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/images/my_apple_icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/images/icons/splash-640x1136.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
+PWA_APP_SHORTCUTS = [
+    {
+        'name': 'Receiving',
+        'url': reverse_lazy('tracker:receiving'),
+        'description': 'Scan packages to update status'
+    }
+]
+PWA_APP_SCREENSHOTS = []
+PWA_APP_DEBUG_MODE = os.environ.get('ENV') == 'DEV'

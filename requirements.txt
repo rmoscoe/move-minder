@@ -12,6 +12,7 @@ distlib==0.3.8
 Django==5.0.3
 django-browser-reload==1.12.1
 django-phonenumber-field==7.3.0
+django-pwa==1.1.0
 django-storages==1.14.2
 django-tailwind==3.8.0
 dulwich==0.21.7

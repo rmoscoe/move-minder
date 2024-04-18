@@ -98,8 +98,6 @@ Receiving |
                     const url = code.data;
                     if (isValidURL(url)) {
                         window.location.href = url;
-                    } else {
-                        console.log('QR code detected, but not a valid URL:', url);
                     }
                 }
             };
@@ -111,10 +109,9 @@ Receiving |
     function isValidURL(url) {
         try {
             if (!URL.canParse(url)) {
-                console.log("Not a URL");
                 return false;
             }
-            const url_obj = URL(url);
+            const url_obj = new URL(url);
             const location_host = window.location.hostname;
             return url_obj.hostname === location_host && url_obj.pathname === "{% url 'tracker:receiving' %}" && /^\?parcel=\d+/.test(url_obj.search);
         } catch (error) {

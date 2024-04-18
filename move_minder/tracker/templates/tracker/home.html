@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-
 {% extends "base.html" %}
+{% load static %}
 
 {% block main %}
 <main class="pb-4 md:pb-6 xl:pb-8">
@@ -22,7 +22,7 @@
     <section id="content" class="my-4 md:my-6 lg:my-8 md:flex md:flex-nowrap md:justify-between px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10">
         <section id="organize" class="w-full mt-8 sm:mt-10 md:mt-0 md:w-1/3 flex justify-center md:p-4">
             <div class="w-full py-4 sm:py-6 md:py-0">
-                <img src="/static/tracker/form-angled-forward-cropped.png" alt="A computer screen showing input fields related to a parcel" class="mx-auto size-[360px] sm:size-96 md:size-52 lg:size-72 xl:size-96 drop-shadow-md" />
+                <img src="{% static 'tracker/form-angled-forward-cropped.png' %}" alt="A computer screen showing input fields related to a parcel" class="mx-auto size-[360px] sm:size-96 md:size-52 lg:size-72 xl:size-96 drop-shadow-md" />
                 <h2 class="mt-3 sm:mt-5 sm:mb-2 md:mt-7 md:mb-5 lg:mt-9 lg:mb-7 text-center">Organize</h2>
                 <div class="space-y-4">
                     <p>Create a record for each box or bag documenting what it contains. You can even include a photo! Print a label for every box, bag, device, or piece of furniture showing which room it goes in at your destination, making unpacking a breeze.</p>
@@ -33,7 +33,7 @@
 
         <section id="track" class="w-full md:w-1/3 box flex justify-center mt-8 sm:mt-10 md:mt-0 md:p-4">
             <div class="w-full py-4 sm:py-6 md:py-0">
-                <img src="/static/tracker/status-update-cropped.png" class="mx-auto size-[360px] sm:size-96 md:size-52 lg:size-72 xl:size-96 drop-shadow-md" alt="A phone screen showing a status update menu" />
+                <img src="{% static 'tracker/status-update-cropped.png' %}" class="mx-auto size-[360px] sm:size-96 md:size-52 lg:size-72 xl:size-96 drop-shadow-md" alt="A phone screen showing a status update menu" />
                 <h2 class="mt-3 sm:mt-5 sm:mb-2 md:mt-7 md:mb-5 lg:mt-9 lg:mb-7 text-center">Track</h2>
                 <div class="space-y-4">
                     <p>Scan the QR code on each label to quickly update the status of the item. That way, you can verify that every item reached your destination safe and sound.</p>
@@ -44,7 +44,7 @@
 
         <section id="recover" class="w-full mt-8 sm:mt-10 md:mt-0 md:w-1/3 flex justify-center md:p-4">
             <div class="w-full py-4 sm:py-6 md:py-0">
-                <img src="/static/tracker/damaged-box.jpeg" alt="mover delivers a damaged, crushed box out of the back of a moving van to a man and woman" class="mx-auto size-[360px] sm:size-96 md:size-52 lg:size-72 xl:size-96 drop-shadow-md" />
+                <img src="{% static 'tracker/damaged-box.jpeg' %}" alt="mover delivers a damaged, crushed box out of the back of a moving van to a man and woman" class="mx-auto size-[360px] sm:size-96 md:size-52 lg:size-72 xl:size-96 drop-shadow-md" />
                 <h2 class="mt-3 sm:mt-5 sm:mb-2 md:mt-7 md:mb-5 lg:mt-9 lg:mb-7 text-center">Recover</h2>
                 <div class="space-y-4">
                     <p>In the unfortunate event that something does not reach the destination--or arrives damaged--you'll have a record of exactly what is missing and (optionally) the weight of each missing or damaged parcel. With that information, you may be able to recover certain costs from your moving company.</p>

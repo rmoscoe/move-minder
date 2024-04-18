@@ -126,7 +126,6 @@ Dashboard |
 </div>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    console.log(Object.values({{ parcels|safe }}));
     const options = {
         series: Object.values({{ parcels|safe }}),
         labels: Object.keys({{ parcels|safe }}),

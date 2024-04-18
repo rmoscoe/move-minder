@@ -572,10 +572,8 @@ class EndReceivingView(View):
 class ReceiveParcelView(View):
     def post(self, request, *args, **kwargs):
         try:
-            print("Route hit")
             statuses = ["Received", "Damaged", "Accepted"]
             parcel_id = kwargs.get("pk", None)
-            print(f"Parcel ID: {parcel_id}")
             if parcel_id is None:
                 return HttpResponse("Parcel ID is required", status=400)
             
@@ -587,10 +585,8 @@ class ReceiveParcelView(View):
             if status is None:
                 return HttpResponse("The request must include a body with a 'status' key", status=400)
             
-            print(f"Status: {status}")
             if status not in statuses:
                 return HttpResponse("Invalid status. Allowed options include 'Received', 'Damaged', or 'Accepted'.", status=400)
-            print("Updating status")
             parcel.update(status=status)
             return HttpResponseRedirect(reverse("tracker:receiving"))
 
