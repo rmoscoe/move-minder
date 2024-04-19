@@ -132,4 +132,7 @@ GitHub.sublime-settings
 *.pptx
 *.ppt
 /static
-/move_minder/static
+move_minder/static
+move_minder/move_minder/static
+*/static
+*/*/static

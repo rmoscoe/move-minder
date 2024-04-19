@@ -24,7 +24,7 @@ const setDivWidth = () => {
 
 window.onload = () => {
     setDivWidth();
-    const formDivs = document.querySelectorAll("form > div").concat(document.querySelectorAll("form > fieldset > div"));
+    const formDivs = Array.from(document.querySelectorAll("form > div")).concat(Array.from(document.querySelectorAll("form > fieldset > div")));
     formDivs.forEach(div => {
         const label = div.querySelector("label");
         const input = div.querySelector("input");

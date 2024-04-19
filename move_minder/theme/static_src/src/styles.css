@@ -146,7 +146,7 @@ option {
 }
 
 .hero-image {
-    @apply h-60 sm:h-64 md:h-72 lg:h-96 xl:h-[44rem] bg-center bg-no-repeat bg-cover relative;
+    @apply h-[17rem] sm:h-[19rem] md:h-[22rem] lg:h-[44rem] xl:h-[48rem] 2xl:h-[52rem] bg-center bg-no-repeat bg-cover relative;
     background-image: linear-gradient(rgba(255, 255, 255, .25), rgba(255, 255, 255, .25)), url("/static/tracker/hero-image.jpg");
 }
 

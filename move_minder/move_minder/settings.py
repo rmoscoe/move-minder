@@ -167,7 +167,8 @@ STATIC_ROOT = f'{BASE_DIR}/move_minder/static'
 
 STATICFILES_DIRS = [
     "move_minder/tracker/static",
-    "move_minder/theme/static"
+    "move_minder/theme/static",
+    "move_minder/static"
 ]
 
 STORAGES = {
@@ -207,19 +208,19 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': f"{STATIC_URL}images/app_icon.png",
+        'src': f"{STATIC_URL}images/icons/move_minder_icon.png",
         'sizes': '160x160'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src': '/static/images/my_apple_icon.png',
+        'src': f"{STATIC_URL}images/icons/move_minder_icon.png",
         'sizes': '160x160'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [
     {
-        'src': '/static/images/icons/splash-640x1136.png',
+        'src': f"{STATIC_URL}images/splash.png",
         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]
