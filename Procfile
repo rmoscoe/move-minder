@@ -1,2 +1,2 @@
 web: gunicorn move_minder.wsgi --log-file -
-release: python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic
+release: python move_minder/manage.py makemigrations && python move_minder/manage.py migrate && python move_minder/manage.py collectstatic
