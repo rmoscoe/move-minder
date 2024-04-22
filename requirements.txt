@@ -19,6 +19,7 @@ dulwich==0.21.7
 fastjsonschema==2.19.1
 filelock==3.13.1
 fontawesomefree==6.5.1
+gunicorn==22.0.0
 idna==3.6
 installer==0.7.0
 jaraco.classes==3.3.0
