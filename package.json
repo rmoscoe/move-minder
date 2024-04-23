@@ -1,0 +1,19 @@
+{
+    "name": "move-minder",
+    "version": "1.0.0",
+    "description": "Organize | Track | Recover",
+    "main": "",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/rmoscoe/move-minder.git"
+    },
+    "author": "Ryan Moscoe",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/rmoscoe/move-minder/issues"
+    },
+    "homepage": "https://moveminder-tracker-f210fd4c1414.herokuapp.com/"
+  }
