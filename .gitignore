@@ -12,7 +12,6 @@ scripts/outputs*
 scripts/results/
 
 # Tailwind/Webpack Build
-move_minder/theme/static/
 moveminder_tracker/static/
 
 # Node #
