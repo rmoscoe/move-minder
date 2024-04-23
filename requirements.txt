@@ -56,4 +56,5 @@ trove-classifiers==2024.1.8
 typing_extensions==4.10.0
 urllib3==2.1.0
 virtualenv==20.25.0
+whitenoise==6.6.0
 xattr==0.10.1
