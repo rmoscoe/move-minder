@@ -1,6 +1,7 @@
 from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
@@ -490,6 +491,7 @@ class ReceivingView(SitemapMixin, LoginRequiredMixin, TemplateView):
         if parcel_id is not None:
             parcel = Parcel.objects.get(pk=parcel_id)
             context['parcel'] = parcel
+        context['base_url'] = settings.BASE_URL
         return context
 
     def get(self, request, *args, **kwargs):

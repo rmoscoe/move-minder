@@ -31,9 +31,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('ENV') == 'DEV'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://moveminder-tracker-f210fd4c1414.herokuapp.com/']
 
-BASE_URL = "http://localhost:8000" if DEBUG else ""
+BASE_URL = "http://localhost:8000" if DEBUG else "https://moveminder-tracker-f210fd4c1414.herokuapp.com/"
 
 # Application definition
 
