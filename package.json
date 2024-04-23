@@ -4,8 +4,7 @@
     "description": "Organize | Track | Recover",
     "main": "",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "installTheme": "cd move_minder/theme/static_src && npm run install"
+      "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
       "type": "git",

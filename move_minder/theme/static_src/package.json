@@ -3,7 +3,6 @@
   "version": "3.8.0",
   "description": "",
   "scripts": {
-    "install": "npm install",
     "start": "npm run dev",
     "build": "npm run build:clean && npm run build:tailwind",
     "build:clean": "rimraf ../static/css/dist",
