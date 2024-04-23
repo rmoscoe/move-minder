@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "rimraf": "^5.0.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "webcam-easy": "^1.1.1"
   }
