@@ -76,7 +76,7 @@ Receiving |
     const noPropagate = (event) => event.StopPropagation();
 
     {% if not parcel %}
-    const webcam = new Webcam(cameraFeed, 'user', canvas);
+    const webcam = new Webcam(cameraFeed, 'environment', canvas);
     function startQRCodeScanner() {
         function detectQRCode() {
             const frame = webcam.snap();
