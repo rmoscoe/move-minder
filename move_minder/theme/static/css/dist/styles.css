@@ -1099,6 +1099,10 @@ select {
   height: 3.5in;
 }
 
+.h-\[calc\(100\%-114px\)\] {
+  height: calc(100% - 114px);
+}
+
 .h-fit {
   height: -moz-fit-content;
   height: fit-content;
