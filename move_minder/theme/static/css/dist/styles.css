@@ -3919,6 +3919,10 @@ td.link {
 }
 
 @media (min-width: 1024px) {
+  .lg\:absolute {
+    position: absolute;
+  }
+
   .lg\:inset-x-1\/4 {
     left: 25%;
     right: 25%;
