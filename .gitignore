@@ -130,5 +130,5 @@ GitHub.sublime-settings
 .DS_Store
 *.pptx
 *.ppt
-/static
 move_minder/move_minder/static
+!move_minder/theme/static/css/dist
