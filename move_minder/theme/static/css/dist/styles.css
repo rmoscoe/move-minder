@@ -3605,10 +3605,6 @@ td.link {
 }
 
 @media (min-width: 768px) {
-  .md\:relative {
-    position: relative;
-  }
-
   .md\:inset-x-\[12\.5\%\] {
     left: 12.5%;
     right: 12.5%;
@@ -3919,10 +3915,6 @@ td.link {
 }
 
 @media (min-width: 1024px) {
-  .lg\:absolute {
-    position: absolute;
-  }
-
   .lg\:inset-x-1\/4 {
     left: 25%;
     right: 25%;
