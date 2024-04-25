@@ -32,7 +32,7 @@ My Moves |
                     <td class="link">
                         <a href="{% url 'tracker:move-detail' move.id %}" class="block">{{ move.start_date|date:"SHORT_DATE_FORMAT" }}</a>
                     </td>
-                    <td class="link cursor-pointer" onclick="window.location='{% url "tracker:move-detail" move.id %}'">
+                    <td class="max-md:hidden link cursor-pointer" onclick="window.location='{% url "tracker:move-detail" move.id %}'">
                         <a href="{% url 'tracker:move-detail' move.id %}" class="block w-full">{{ move.end_date|date:"SHORT_DATE_FORMAT" }}</a>
                     </td>
                     <td class="link">

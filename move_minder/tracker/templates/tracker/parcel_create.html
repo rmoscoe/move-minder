@@ -110,8 +110,38 @@ New Parcel |
     const camIcon = document.getElementById("camera-icon");
     const spinner = document.getElementById("spinner");
     let picture;
+    let stream;
+    let facingMode = "environment";
 
-    const webcam = new Webcam(cameraFeed, 'enviornment', canvas);
+    const startCamera = async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } });
+            cameraFeed.srcObject = stream;
+        } catch (error) {
+            console.error("Error accessing webcam: ", error)
+        }
+    }
+
+    const stopCamera = () => {
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+    }
+
+    const snap = () => {
+        canvas.height = cameraFeed.scrollHeight;
+        canvas.width = cameraFeed.scrollWidth;
+        const context = canvas.getContext("2d");
+        if (facingMode === "user") {
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+        }
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+        const data = canvas?.toDataURL("image/png");
+        return data;
+    }
 
     const setProps = () => {
         const typeMenu = document.getElementById("id_type");
@@ -206,10 +236,7 @@ New Parcel |
         camIcon.classList.add("hidden");
         spinner.classList.remove("hidden");
         cameraButton.setAttribute("disabled", true);
-        await webcam.start();
-        if (webcam.webcamCount < 2) {
-            flipButton.classList.add("hidden");
-        }
+        await startCamera();
         cameraDiv.classList.remove("hidden");
         cameraButton.removeAttribute("disabled");
         spinner.classList.add("hidden");
@@ -218,7 +245,7 @@ New Parcel |
 
     closeCam.addEventListener("click", (event) => {
         event.stopPropagation();
-        webcam.stop();
+        stopCamera();
         if (!canvasControls.classList.contains("hidden")) {
             canvasControls.classList.add("hidden");
         }
@@ -237,7 +264,7 @@ New Parcel |
     snapButton.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        picture = webcam.snap();
+        picture = snap();
         camControls.classList.add("hidden");
         cameraFeed.classList.add("hidden");
         canvas.classList.remove("hidden");
@@ -247,7 +274,8 @@ New Parcel |
 
     flipButton.addEventListener("click", (event) => {
         event.stopPropagation();
-        webcam.flip();
+        facingMode = facingMode === "environment" ? "user" : "environment";
+        startCamera();
     });
 
     tryAgain.addEventListener("click", (event) => {
@@ -271,7 +299,7 @@ New Parcel |
             const file = new File([blob], `img_${timestamp}.jpeg`, { type: "image/jpeg" });
             setFiles(photoInput, [file]);
         }, "image/jpeg");
-        webcam.stop();
+        stopCamera();
         canvasControls.classList.add("hidden");
         canvas.classList.add("hidden");
         cameraFeed.classList.remove("hidden");
