@@ -153,15 +153,20 @@ class Parcel(Model):
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=8,
+            box_size=10,
             border=4
         )
         qr.add_data(url)
         qr.make(fit=True)
         qrcode_img = qr.make_image(fill_color="black", back_color="white")
-        canvas = Image.new("RGB", (296, 296), "white")
-        draw = ImageDraw.Draw(canvas)
-        canvas.paste(qrcode_img)
+
+        max_size = (296, 296)
+        qrcode_img.thumbnail(max_size, Image.LANCZOS)
+
+        canvas = Image.new("RGB", max_size, "white")
+        # draw = ImageDraw.Draw(canvas)
+        canvas.paste(qrcode_img, (int((max_size[0] - qrcode_img.size[0]) / 2), int((max_size[1] - qrcode_img.size[1]) / 2)))
+
         fname = f"qr_code-{self.id}.png"
         buffer = BytesIO()
         canvas.save(buffer, 'PNG')
