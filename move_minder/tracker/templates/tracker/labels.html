@@ -42,7 +42,7 @@
             {% if parcels %}
                 {% for parcel in parcels %}
                 <section class="h-[3.5in] w-[5in] box-border rounded-md p-2 break-inside-avoid grid grid-cols-2 gap-1">
-                    <img src="{{ parcel.qr_code.url }}" alt="{{ base_url }}{% url 'tracker:receiving'}?parcel={{ parcel.id }}" class="size-48" />
+                    <img src="{{ parcel.qr_code.url }}" alt="{{ base_url }}{% url 'tracker:receiving'}?parcel={{ parcel.id }}" class="size-48 object-cover" />
                     <div class="address pt-5 whitespace-nowrap overflow-hidden text-5xl h-48 box-border invisible">
                         <p class="addr-text">{{ parcel.move_id.primary_user.first_name }} {{ parcel.move_id.primary_user.last_name }}</p>
                         <p class="addr-text">{{ parcel.move_id.destination_address1 }}</p>
