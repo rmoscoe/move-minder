@@ -33,7 +33,7 @@ DEBUG = os.environ.get('ENV') == 'DEV'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://moveminder-tracker-f210fd4c1414.herokuapp.com/', "23.243.226.209", "moveminder-tracker-f210fd4c1414.herokuapp.com"]
 
-BASE_URL = "http://localhost:8000" if DEBUG else "https://moveminder-tracker-f210fd4c1414.herokuapp.com/"
+BASE_URL = "http://localhost:8000" if DEBUG else "https://moveminder-tracker-f210fd4c1414.herokuapp.com"
 
 # Application definition
 
