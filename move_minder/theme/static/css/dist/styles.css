@@ -1099,8 +1099,8 @@ select {
   height: 3.5in;
 }
 
-.h-\[calc\(100\%-114px\)\] {
-  height: calc(100% - 114px);
+.h-\[calc\(100\%-200px\)\] {
+  height: calc(100% - 200px);
 }
 
 .h-fit {
@@ -3919,6 +3919,10 @@ td.link {
 }
 
 @media (min-width: 1024px) {
+  .lg\:relative {
+    position: relative;
+  }
+
   .lg\:inset-x-1\/4 {
     left: 25%;
     right: 25%;
@@ -4008,6 +4012,10 @@ td.link {
 
   .lg\:h-8 {
     height: 2rem;
+  }
+
+  .lg\:h-\[calc\(100\%-114px\)\] {
+    height: calc(100% - 114px);
   }
 
   .lg\:w-1\/2 {
