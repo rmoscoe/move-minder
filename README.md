@@ -10,15 +10,24 @@
   - [Installation](#installation)
   - [Usage](#usage)
     - [Getting Started](#getting-started)
+    - [Dashboard](#dashboard)
+    - [My Moves](#my-moves)
+    - [New Move](#new-move)
+    - [Move Detail](#move-detail)
+    - [New Parcel](#new-parcel)
+    - [Parcel Detail](#parcel-detail)
+    - [Receiving](#receiving)
 - [Learning Points](#learning-points)
+  - [Django Generic Views](#django-generic-views)
+  - [Django Forms](#django-forms)
+  - [Django Template Language](#django-template-language)
+  - [Webcam](#webcam)
+  - [Amazon Web Services](#amazon-web-services)
 - [Author Info](#author-info)
   - [Ryan Moscoe](#ryan-moscoe)
-- [Credits](#credits)
+- [Future Development](#future-development)
 - [License](#license)
-- [Badges](#badges-1)
-- [Features](#features)
 - [Contributing](#contributing)
-- [Tests](#tests)
 
 <br/>
 
@@ -224,23 +233,159 @@ Because MoveMinder is a web application, you do not need to install it. You do h
 
 #### Getting Started
 
-Click the `Get Started` button on the homepage to sign up for a user account.
+Click the `Get Started` button on the homepage to sign up for a user account. After signing up, you will be prompted to log in. Navigating MoveMinder is intended to be straightforward, and you should be able to reach pretty much any page within one or two clicks from anywhere in the application. On large screens, the header contains the primary navigation links, and many of the figures that follow show the header. On small screens, a drawer on the left-hand side of the application replaces the navigation links in the header (see below).
 
+<br/>
+
+![Drawer](./move_minder/static/images/drawer-light.png)
+
+<br/>
+
+#### Dashboard
+
+Once logged in, you will see the Dashboard. The Dashboard is the central hub of the application. As shown below, it grants access to all other pages within the application, and it displays key information at a glance: your upcoming moves and a pie chart showing the status of all parcels across all your moves. You can click any upcoming move or recently viewed page to navigate to that page.
+
+<br/>
+
+![Dashboard page](./move_minder/static/images/dashboard-light.jpg)
+
+<br/>
+
+#### My Moves
+
+The My Moves page shows a list of all your moves, past and future. Click on any move to view its details, or click the `Create New Move` button to add a move. The screenshot below shows the My Moves page, and it also shows another feature of the application: dark mode. Toggle dark mode on or off with the moon/sun icons in the header.
+
+<br/>
+
+![My Moves page](./move_minder/static/images/myMoves-dark.png)
+
+<br/>
+
+#### New Move
+
+The figure below shows the New Move page. All MoveMinder forms are designed with a consistent look and feel.
+
+<br/>
+
+![New Move page](./move_minder/static/images/newMove-light.png)
+
+<br/>
+
+#### Move Detail
+
+The Move Detail page shows the dates and other details of a single move, as well as the origin and destination addresses. It also includes a pie chart that shows the status of all parcels for that move, and finally, a list of all parcels in that move. Buttons at the top of the Move Detail page allow you to edit or delete the move.
+
+<br/>
+
+![Move Detail page](./move_minder/static/images/moveDetail-dark.png)
+
+<br/>
+
+Another set of buttons above the Parcels table lets you create a new parcel or take action on all parcels for that move at once:
+* **Add**: Add a new parcel to the move.
+* **Info**: Reveal a card with instructions for the remaining buttons on this screen.
+* **Print**: Print labels for all parcels in this move.
+* **Bulk Ship**: Set the status of all "Packed" parcels to "In Transit." You always have the option to scan each parcel and update its status individually when loading the parcel into your vehicle or turning it over to a moving company, but the Bulk Ship option is intended to provide a more efficient option.
+* **End Receiving**: Set the status of all parcels not "Received," "Damaged," or "Accepted" to "Lost." This button is intended for use after scanning all parcels received from movers or unloaded from your vehicle. Essentially, any parcel you have not received after your move is lost, and the End Receiving button provides a convenient way to update the status of these parcels without having to find each one in your list of parcels and update its status individually.
+
+<br/>
+
+#### New Parcel
+
+As shown below, the New Parcel page lets you add a parcel to your move. Choose a parcel type (e.g., bag, box, furniture) and enter any optional details. You may also take a picture of the parcel's contents or upload a photo, if desired.
+
+<br/>
+
+![New Parcel page](./move_minder/static/images/newParcel-light.png)
+
+<br/>
+
+#### Parcel Detail
+
+If you uploaded a photo of the parcel or its contents, the Parcel Detail page shows that photo. In addition, this page shows the parcel's status, contents, and details, and lets you update the status. It also includes a set of buttons at the top of the page. Whereas the buttons on the Move Detail page apply actions to all parcels for that move, the buttons on the Parcel Detail page apply actions to the current parcel only:
+* **Info**: Reveals a card with information about the other buttons.
+* **Print**: Prints the label for the current parcel.
+* **Edit**: Lets you edit the parcel details.
+* **Delete**: Deletes the current parcel.
+
+<br/>
+
+![Parcel Detail page](./move_minder/static/images/parcelDetail-dark.png)
+
+<br/>
+
+Open the Status menu and select an option to change the parcel's current status:
+* **Packed**: The parcel is ready for shipment but has not yet been loaded onto a vehicle or provided to a moving company.
+* **In Transit**: The parcel has been loaded onto a vehicle or provided to a moving company but has not yet been received at the destination.
+* **Lost**: The parcel never arrived at its destination.
+* **Received**: The parcel has arrived at its destination and is once again in your custody. You have not yet determined whether it arrived in good condition.
+* **Damaged**: The parcel arrived at its destination but was damaged en route.
+* **Accepted**: The parcel arrived at its destination in the same condition in which it departed its point of origin.
+
+After selecting a status, remember to click the `Submit` button to save the status update. The figure below shows a confirmation of a successful status update.
+
+<br/>
+
+![Status update confirmation](./move_minder/static/images/parcelStatusUpdate-light.png)
+
+<br/>
+
+#### Receiving
+
+You may use the Camera app on your mobile device or the Receiving page in MoveMinder to scan the QR code on the label for any parcel. The figure below shows the Receiving page on a mobile device.
+
+<br/>
+
+![Receiving page](./move_minder/static/images/receiving-dark.png)
+
+<br/>
+
+When a QR code is detected, either by the Camera app or the MoveMinder Receivng page, you will be taken to the MoveMinder Receiving page, where the camera feed will be replaced by the identifying details for the parcel and a series of buttons, as shown in the figure below:
+* **Received**: This is the primary action for this screen, so the button is quite large. Click or tap this button to change the status of the parcel to "Received."
+* **Exit**: Click or tap "Exit" to return to the Dashboard page without updating the status of this parcel.
+* **Retry**: Click or tap "Retry if the parcel details do not match the label, indicating the QR code was not read correctly. The camera feed will return and scanning will resume.
+* **Damaged**: If there is obvious damage to the parcel, you may change its status to "Damaged" instead of "Received."
+* **Accepted**: In some cases, you may not need to open a box to know the parcel arrived safely. For example, it may be obvious that a piece of furniture was not damaged en route. You may update the parcel's status to "Accepted" instead of "Received."
+
+<br/>
+
+![Receiving options](./move_minder/static/images/receiving-form-light.png)
+
+<br/>
 
 ## Learning Points 
 
+### Django Generic Views
 
-This is a good place to Explain what you Learned by creating this application.
-This is a great way to remind about all of the Complex Skills you now have.
-If the user is less experienced than you:
-They will be impressed by what you can do!
+My previous work with Django involved standard class-based views inheriting from `django.views.View`. For this project, I created views by subclassing TemplateView, ListView, DetailView, CreateView, UpdateView, and DeleteView. Getting started with generic views is a little tricky, because instead of defining GET, POST, PUT/PATCH, and DELETE methods, you basically feed the view some information (like which template and/or form to use), and the rest happens under the hood. That's great if you're only trying to do exactly what the parent view class is designed to do--like display a list of items or details for a single item. But many of my views were more complex. For example, the Move Detail page had to display not only the details for a single move, but also a list of all the parcels associated with that move. 
 
-If the user is more experienced than you:
-They will be impressed by what you can do!
+To customize the behavior of a view, you have to override one or more methods. This takes a little getting used to--but now that I know what I'm doing, it's quite a bit easier to use generic views than standard views for any view that renders a template. There's no going back! However, the DeleteView is decidedly less useful than other generic views, because it requires a separate template and a separate URL path for a delete confirmation. Conventionally, a delete confirmation is just a modal, not a whole separate page. Likewise, in a few places, I found that I needed a URL path and view that did not render a template; the user was going to stay on the same page but interact with the server in some way. I used traditional views for these cases (for example, when the user clicks the `End Receiving` button, the user stays on the Move Detail page, but I need a way to communicate with the server in order to update the status of the parcels).
 
-Remember, it is easy to forget exactly how Valuable and Impressive your skills are, as well as How Much You’ve Learned!
-So quantify that here!
+<br/>
 
+### Django Forms
+
+Forms provide the context that enables a view to render a template with form fields, and they provide the logic to validate and sanitize form data when it is submitted. There was nothing particularly challenging about using Django forms; I had just never done it before, so it was a learning experinece for me.
+
+<br/>
+
+### Django Template Language
+
+The Django Template Language itself is quite similar to other template engines I have used, such as Handlebars (for Express) and HEEX (HTML Embedded EliXir for Elixir/Phoenix), and in fact, it is noticeably simpler than some. However, there is one major quirk to Django templates. Other template engines I have used start with the highest-level template and embed pages and partials within that template. Django starts at the page level, and the page template has to declare that it "extends" a higher-level template (e.g., "base.html"). Yet templates can also "include" lower-level templates (e.g., partials).
+
+<br/>
+
+### Webcam
+
+I had never worked with media input devices (cameras, microphones) until I created this application. It turned out to be relatively simple to control the camera, but capturing a frame from the video feed (taking a picture) is more complex than I anticipated. This is a new skill I can now proudly say I possess. I also had to learn some related skills, like how to generate QR codes, how to write a save hook in the Django ORM, and how to read a QR code from an image.
+
+<br/>
+
+### Amazon Web Services
+
+I had previous experience with some parts of AWS, such as S3, EC2, and DynamoDB. However, for this application, I needed to learn RDS in order to host a PostgreSQL database on AWS and access that database from a web application not hosted on EC2. Because I am storing QR codes and parcel images in the database, I also needed to learn how Django, PostgreSQL, RDS, and S3 all work in concert to make that happen.
+
+<br/>
 
 ## Author Info
 
@@ -250,57 +395,24 @@ So quantify that here!
 * [LinkedIn](https://www.linkedin.com/in/ryan-moscoe-8652973/)
 * [Github](https://github.com/rmoscoe)
 
-The user has looked through your whole README, and gotten familiar with your application. 
-This is where you take credit, and make it easy for them to learn more about you!
-Direct them to the following:
-- Your GitHub Profile
-- Your LinkedIn
-- Your Portfolio Website
-- And Anything Else You Want!
+<br/>
 
-Give credit where credit is due! 
+## Future Development
 
-If you Pseudocode or Pair Program with someone else, give them kudos in your Contributors section!
+Because this is a portfolio project, there are no specific plans for additional development. However, if and when time allows, I might periodically add features or fix bugs. Examples of features that ***may*** be added over time include
+* Groups. This would allow an organization or family to include specific users as members. Roles and permissions could then be assigned accordingly, and visibility to other users could be limited to the group. For example, if a user creates a group, the user could then create other user accounts within that group or provide a group name or ID to individuals to use when signing up for an account. When adding users to a move, each user would only be able to see and select other users within their group.
+* Account deactivation/deletion. This would allow a user to deactivate or delete his or her account.
+* Moving company model. This would allow move details to include the name of the moving company being used for the move. The moving company model would also include contact information for the moving company.
+* Resources. This would be a separate page (but would also be represented on the Dashboard in some way) with helpful information, such as blog posts, videos, and links, related to moving. Topics could include how to select the right moving company, how best to pack different kinds of items, considerations for interstate and international moves, strategies for recovering losses from damaged and lost parcels, and so on.
 
-
-## Credits
-
-Starter code provided by Trilogy Education Services, LLC, a 2U, Inc. brand, in conjunction with the University of California, Berkeley.
-
-List your collaborators, if any, with links to their GitHub profiles.
-
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
-
-If you followed tutorials, include links to those here as well.
-
+<br/>
 
 ## License
 
-The last section of a good README is a license. This lets other developers know what they can and cannot do with your project. If you need help choosing a license, use [https://choosealicense.com/](https://choosealicense.com/)
+See repo for license information.
 
-
----
-
-🏆 The sections listed above are the minimum for a good README, but your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
-
-## Badges
-
-![badmath](https://img.shields.io/github/languages/top/nielsenjared/badmath)
-
-Badges aren't _necessary_, per se, but they demonstrate street cred. Badges let other developers know that you know what you're doing. Check out the badges hosted by [shields.io](https://shields.io/). You may not understand what they all represent now, but you will in time.
-
-## Features
-
-If your project has a lot of features, consider adding a heading called "Features" and listing them there.
+<br/>
 
 ## Contributing
 
-If you created an application or package and would like other developers to contribute it, you will want to add guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own.
-
-## Tests
-
-Go the extra mile and write tests for your application. Then provide examples on how to run them.
-
----
-
-© 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
+Because this is a portfolio project, I am not accepting contributions at this time. However, feel free to fork this repo and create your own version.
