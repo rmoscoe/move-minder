@@ -62,7 +62,7 @@
 
 ### Badges
 
-![Static Badge](https://img.shields.io/badge/CSS-40.4%25-%23395ded) &nbsp; &nbsp; ![Static Badge](https://img.shields.io/badge/JavaScript-27.5%25-%23eddc1c) &nbsp; &nbsp; ![Static Badge](https://img.shields.io/badge/HTML-21.0%25-%23db441f) &nbsp; &nbsp; ![Static Badge](https://img.shields.io/badge/Python-11.1%25-%234584b6)
+![Static Badge](https://img.shields.io/badge/HTML-60.9%25-%23e34c26) &nbsp; &nbsp; ![Static Badge](https://img.shields.io/badge/Python-32.4%25-%234584b6) &nbsp; &nbsp; ![Static Badge](https://img.shields.io/badge/CSS-3.4%25-%23264de4) &nbsp; &nbsp; ![Static Badge](https://img.shields.io/badge/JavaScript-3.2%25-%23f0db4f)
 
 <br/>
 
