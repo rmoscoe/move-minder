@@ -1,3 +1,6 @@
+*.py linguist-detectable
+*.py linguist-language=Python
 move_minder/static/* linguist-vendored
+move_minder/static/*/* linguist-vendored
 *.scss linguist-vendored
 *.less linguist-vendored
