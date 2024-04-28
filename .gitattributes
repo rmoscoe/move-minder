@@ -4,5 +4,6 @@ move_minder/static/* linguist-vendored
 move_minder/static/*/* linguist-vendored
 move_minder/static/*/*/* linguist-vendored
 move_minder/static/*/*/*/* linguist-vendored
+move_minder/static/fontawesomefree/js-packages/@fortawesome/*/* linguist-vendored
 *.scss linguist-vendored
 *.less linguist-vendored

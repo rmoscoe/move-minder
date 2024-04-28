@@ -9,6 +9,7 @@
 - [Installation and Usage](#installation-and-usage)
   - [Installation](#installation)
   - [Usage](#usage)
+    - [Getting Started](#getting-started)
 - [Learning Points](#learning-points)
 - [Author Info](#author-info)
   - [Ryan Moscoe](#ryan-moscoe)
@@ -209,15 +210,21 @@ Finally, this example shows a portion of my parcel_update.html template. For som
 
 ### Installation
 
-Provide instructions and examples for use. Include screenshots as needed. 
+Because MoveMinder is a web application, you do not need to install it. You do have the **option** to install it, though, because it is a PWA.
+1. Visit [MoveMinder](https://moveminder-tracker-f210fd4c1414.herokuapp.com/) in any modern web browser. Alternatively, to install the app and have it open directly to the Receiving page, visit [Receiving Page](https://moveminder-tracker-f210fd4c1414.herokuapp.com/parcels/receiving/).
+2. Click the *Install* icon in the address bar. In Chrome, it looks something like this:
+
+<br/>
+
+![Install icon](./move_minder/static/images/install.png)
+
+<br/>
 
 ### Usage
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+#### Getting Started
 
-```md
-![alt text](assets/images/screenshot.png)
-```
+Click the `Get Started` button on the homepage to sign up for a user account.
 
 
 ## Learning Points 

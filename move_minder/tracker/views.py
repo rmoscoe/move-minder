@@ -64,7 +64,7 @@ class HomePageView(SitemapMixin, TemplateView):
 class SignupView(SitemapMixin, AnonymousUserMixin, CreateView):
     model = UserProfile
     template_name = "tracker/signup.html"
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('tracker:login')
     form_class = SignUpForm
 
     def get_context_data(self, **kwargs):
