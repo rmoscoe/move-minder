@@ -1,1 +1,3 @@
 move_minder/static/* linguist-vendored
+*.scss linguist-vendored
+*.less linguist-vendored
