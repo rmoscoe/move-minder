@@ -1,13 +1,13 @@
 *.py linguist-detectable
 *.py linguist-language=Python
-move_minder/static/* linguist-vendored
-move_minder/static/*/* linguist-vendored
-move_minder/static/*/*/* linguist-vendored
-move_minder/static/*/*/*/* linguist-vendored
 move_minder/static/fontawesomefree/js-packages/@fortawesome/free-solid-svg-icons/* linguist-vendored
 move_minder/static/fontawesomefree/js-packages/@fortawesome/free-brands-svg-icons/* linguist-vendored
 move_minder/static/fontawesomefree/js-packages/@fortawesome/*/* linguist-vendored
 move_minder/static/admin/css/* linguist-vendored
 move_minder/static/fontawesomefree/css/* linguist-vendored
+move_minder/static/* linguist-vendored
+move_minder/static/*/* linguist-vendored
+move_minder/static/*/*/* linguist-vendored
+move_minder/static/*/*/*/* linguist-vendored
 *.scss linguist-vendored
 *.less linguist-vendored
