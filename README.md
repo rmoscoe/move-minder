@@ -5,7 +5,7 @@
 - [Technology Used](#technology-used)
   - [Badges](#badges)
 - [Description](#description)
-- [Code Example](#code-example)
+- [Code Examples](#code-examples)
 - [Installation and Usage](#installation-and-usage)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -36,6 +36,7 @@
 | TailwindCSS |  [https://tailwindcss.com/](https://tailwindcss.com/) |
 | JavaScript | [https://developer.mozilla.org/en-US/docs/Web/JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) |
 | Node.js | [https://nodejs.org/en](https://nodejs.org/en) |
+| ApexCharts | [https://apexcharts.com/](https://apexcharts.com/) |
 | PostgreSQL | [https://www.postgresql.org/](https://www.postgresql.org/)
 | Git | [https://git-scm.com/](https://git-scm.com/)     |  
 | GitHub | [https://github.com/](https://github.com/) |
@@ -67,78 +68,142 @@ MoveMinder lets you track the contents and status of every box, appliance, and p
 
 <br/>
 
-I had been sitting on the idea for this project for some time, until I found myself at a point where I needed to create a project as a way to learn Django's generic views and the Django Template Language. I chose to create this application specifically because it lent itself well to the list, detail, create, update, and delete structure of Django's generic views.
+I had been sitting on the idea for this project for some time, until I found myself at a point where I needed to create a project as a way to learn Django's generic views, forms, and the Django Template Language. I chose to create this application specifically because it lent itself well to the list, detail, create, update, and delete structure of Django's generic views.
+
+For the data layer, I opted for a PostgreSQL database, hosted on AWS RDS. Because I needed to include images in the database, I am also using AWS S3. I used Python and Django for both the back end and front end of this application, augmented by TailwindCSS for styling. Finally, I used Gemini to generate images for the homepage.
 
 <br/>
 
-## Code Example
+## Code Examples
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+This first example demonstrates the use of the generic DetailView to create a View for parcel details. This view is slightly more complex than a typical detail view, because it also includes a form for updating the status of the parcel.
 
+
+```python
+class ParcelDetailView(SitemapMixin, LoginRequiredMixin, UpdateView):
+    model = Parcel
+    template_name = "tracker/parcel_detail.html"
+    form_class = ParcelStatusForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        success = self.request.GET.get("success", None)
+        if success is not None:
+            context["success"] = success
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        url = request.path
+        user = User.objects.select_related("userprofile").get(id=request.user.id)
+        history = user.userprofile.recent_pages
+        for i in range(len(history)):
+            if history[i]["name"] == f"Parcel Detail: {self.get_object().id}":
+                history.pop(i)
+                break
+        history.insert(0, { "name": f"Parcel Detail: {self.get_object().id}", "url": url})
+        while len(history) > 10:
+            history.pop()
+        user.userprofile.recent_pages = history
+        user.userprofile.save()
+        return super().get(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        url = reverse("tracker:parcel-detail", kwargs={'move_id': self.get_object().move_id.id, 'pk': self.get_object().id})
+        url += "?success=true"
+        return url
+```
+
+The following example shows a Form. I extended Django's built-in User model, so the signup and update forms needed to seamlessly merge the User model with my Userprofile model. I also needed to override the clean() method to account for dual password fields that both related to the single `password` field in the User model.
+
+```python
+class UpdateUserForm(ModelForm):
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=False)
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput, required=False)
+    phone = PhoneNumberField()
+
+    class Meta:
+        model = User
+        fields = ["username", "password1", "password2", "first_name", "last_name", "email", "phone"]
+
+        def __init__(self, *args, **kwargs):
+            self.user = kwargs.get("instance", None)
+            super().__init__(*args, **kwargs)
+
+            self.fields["username"].initial = self.user.username
+            self.fields["first_name"].initial = self.user.first_name
+            self.fields["last_name"].initial = self.user.last_name
+            self.fields["email"].initial = self.user.email
+
+        def clean_password2(self):
+            password1 = self.cleaned_data.get("password1")
+            password2 = self.cleaned_data.get("password2")
+            if password1 and password2 and password1 != password2:
+                raise ValidationError("Passwords don't match")
+            return password2
+
+```
+
+Finally, this example shows a portion of my parcel_update.html template. For some forms in this application, I was able to simply use the {{ form.as_div }} tag to render all form fields, including applicable help text and error messages. This particular form was more complicated, however, because it included a photo input. By default, Django renders the photo input with an Upload button, but I wanted to enable users to snap a photo with the camera on their mobile device. I needed to add a camera button, so I had to render each form field individually.
 
 ```html
-<div class="header">
-        <h1>Hori<span class="seo">seo</span>n</h1>
-        <div>
-            <ul>
-                <li>
-                    <a href="#search-engine-optimization">Search Engine Optimization</a>
-                </li>
-                <li>
-                    <a href="#online-reputation-management">Online Reputation Management</a>
-                </li>
-                <li>
-                    <a href="#social-media-marketing">Social Media Marketing</a>
-                </li>
-            </ul>
+    <form id="update-parcel-form" method="post" class="form-grid my-2 sm:my-3 mx-0 md:mx-auto md:my-8 rounded-md lg:rounded-lg box p-4 md:p-8 lg:p-12 xl:p-16 w-full md:w-4/5 lg:w-2/3 xl:w-1/2 box-border space-y-4 lg:space-y-6" enctype="multipart/form-data">
+        <h2 class="text-center">{{ move.nickname }}: Update Parcel</h2>
+        {% csrf_token %}
+        <div class="fieldWrapper">
+            {{ form.type.as_field_group }}
         </div>
-    </div>
+        <div class="fieldWrapper">
+            {{ form.room.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.contents.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            <label class="block" for="{{ form.photo.id_for_label }}">
+                <span>Photo:</span>
+            </label>
+            <div class="flex flex-wrap justify-between space-x-2 lg:space-x-3 items-center">
+                {{ form.photo }}
+                <div class="flex mt-2 items-center space-x-2">
+                    <span>&nbsp;or&nbsp;</span>
+                    <button id="camera-button" class="btn-square primary">
+                        <i id="camera-icon" class="fa fa-camera"></i>
+                        <svg id="spinner" class="hidden animate-spin size-5 text-white dark:text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="fieldWrapper">
+            {{ form.weight.as_field_group }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.status.as_field_group }}
+        </div>
+        <div>
+            {% if form.errors %}
+                <div>
+                    <p class="text-red-500 dark:text-red-600 text-sm md:text-base">Please correct the following errors:</p>
+                    <ul class="errorlist">
+                        {% for field, error_list in form.errors.items %}
+                            {% for error in error_list %}
+                                <li>{{ field }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="flex flex-wrap justify-between pt-3">
+                <a href="{% url 'tracker:parcel-detail' move.id object.id %}" class="btn primary subtle">Cancel</a>
+                <input type="submit" value="Submit" class="btn primary" />
+            </div>
+        </div>
+    </form>
 ```
 
-Converting the above non-semantic div with the class of 'header' to an appropriate [<header> semantic element](https://www.w3schools.com/html/html5_semantic_elements.asp). 
-
-```html
-<header>
-        <h1>Hori<span class="seo">seo</span>n</h1>
-        <nav>
-            <ul>
-                <li>
-                    <a href="#search-engine-optimization">Search Engine Optimization</a>
-                </li>
-                <li>
-                    <a href="#online-reputation-management">Online Reputation Management</a>
-                </li>
-                <li>
-                    <a href="#social-media-marketing">Social Media Marketing</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-```
-
-This change require some additional modification to the CSS selector: 
-
-```css
-.header {
-    padding: 20px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    background-color: #2a607c;
-    color: #ffffff;
-}
-```
-
-No longer targeting the element on the page with the class of 'header' but instead the css selector targeting the 'header' element 
-
-```css
-header {
-    padding: 20px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    background-color: #2a607c;
-    color: #ffffff;
-}
-
-```
+<br/>
 
 ## Installation and Usage 
 
