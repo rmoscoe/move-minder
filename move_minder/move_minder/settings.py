@@ -183,8 +183,7 @@ STATIC_ROOT = f'{BASE_DIR}/move_minder/static'
 
 STATICFILES_DIRS = [
     "move_minder/tracker/static",
-    "move_minder/theme/static",
-    "move_minder/static"
+    "move_minder/theme/static"
 ]
 
 STORAGES = {
