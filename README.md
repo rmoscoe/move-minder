@@ -415,4 +415,4 @@ See repo for license information.
 
 ## Contributing
 
-Because this is a portfolio project, I am not accepting contributions at this time. However, feel free to fork this repo and create your own version.
+Because this is a portfolio project, I am not accepting contributions at this time. However, feel free to fork this repo and create your own version. 
