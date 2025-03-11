@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'move_minder.wsgi.application'
 
 CONN_STR = os.environ.get('JAWSDB_URL') if os.environ.get('ENV') == 'PROD' else ''
 
-conn_pattern = re.compile(r'^\w{4}://([a-z]+):([a-z0-9]+)@([a-z0-9.-]+):(\d+)/([a-z0-9]+)$')
+conn_pattern = re.compile(r'^\w{5}://([a-z]+):([a-z0-9]+)@([a-z0-9.-]+):(\d+)/([a-z0-9]+)$')
 conn_str_match = conn_pattern.fullmatch(CONN_STR) if os.environ.get('ENV') == 'PROD' else None
 
 DATABASES = {
