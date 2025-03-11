@@ -27,6 +27,7 @@ jmespath==1.0.1
 keyring==24.3.0
 more-itertools==10.2.0
 msgpack==1.0.7
+mysqlclient==2.2.7
 packaging==23.2
 pexpect==4.9.0
 phonenumbers==8.13.34

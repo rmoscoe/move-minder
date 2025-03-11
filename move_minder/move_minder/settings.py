@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+import re
 from storages.backends.s3boto3 import S3Boto3Storage
 
 load_dotenv()
@@ -98,6 +99,11 @@ WSGI_APPLICATION = 'move_minder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+CONN_STR = os.environ.get('JAWSDB_URL') if os.environ.get('ENV') == 'PROD' else ''
+
+conn_pattern = re.compile(r'^\w{4}://([a-z]+):([a-z0-9]+)@([a-z0-9.-]+):(\d+)/([a-z0-9]+)$')
+conn_str_match = conn_pattern.fullmatch(CONN_STR) if os.environ.get('ENV') == 'PROD' else None
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -106,6 +112,15 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT')
+    }
+} if os.environ.get('ENV') == 'DEV' else {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': conn_str_match.group(5),
+        'USER': conn_str_match.group(1),
+        'PASSWORD': conn_str_match.group(2),
+        'HOST': conn_str_match.group(3),
+        'PORT': conn_str_match.group(4)
     }
 }
 
