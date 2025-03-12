@@ -47,7 +47,8 @@
 | JavaScript | [https://developer.mozilla.org/en-US/docs/Web/JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) |
 | Node.js | [https://nodejs.org/en](https://nodejs.org/en) |
 | ApexCharts | [https://apexcharts.com/](https://apexcharts.com/) |
-| PostgreSQL | [https://www.postgresql.org/](https://www.postgresql.org/)
+| PostgreSQL | [https://www.postgresql.org/](https://www.postgresql.org/) |
+| MySQL | [https://www.mysql.com/](https://www.mysql.com/) |
 | Git | [https://git-scm.com/](https://git-scm.com/)     |  
 | GitHub | [https://github.com/](https://github.com/) |
 | Green Unicorn (gunicorn) | [https://gunicorn.org/](https://gunicorn.org/) |
@@ -80,7 +81,7 @@ MoveMinder lets you track the contents and status of every box, appliance, and p
 
 I had been sitting on the idea for this project for some time, until I found myself at a point where I needed to create a project as a way to learn Django's generic views, forms, and the Django Template Language. I chose to create this application specifically because it lent itself well to the list, detail, create, update, and delete structure of Django's generic views.
 
-For the data layer, I opted for a PostgreSQL database, hosted on AWS RDS. Because I needed to include images in the database, I am also using AWS S3. I used Python and Django for both the back end and front end of this application, augmented by TailwindCSS for styling. Finally, I used Gemini to generate images for the homepage.
+For the data layer, I originally opted for a PostgreSQL database, hosted on AWS RDS. Because I needed to include images in the database, I am also using AWS S3. Now that the AWS Free Tier has expired, it no longer makes sense to keep the database for a portfolio project on AWS. I have retained the PostgreSQL database for the local development environment, but I have switched the production database to a MySQL database through Heroku. That allows me to continue to showcase my use of PostgreSQL and AWS while taking advantage of cost savings. Images are still stored in AWS S3. I used Python and Django for both the back end and front end of this application, augmented by TailwindCSS for styling. Finally, I used Gemini to generate images for the homepage.
 
 <br/>
 
@@ -383,7 +384,7 @@ I had never worked with media input devices (cameras, microphones) until I creat
 
 ### Amazon Web Services
 
-I had previous experience with some parts of AWS, such as S3, EC2, and DynamoDB. However, for this application, I needed to learn RDS in order to host a PostgreSQL database on AWS and access that database from a web application not hosted on EC2. Because I am storing QR codes and parcel images in the database, I also needed to learn how Django, PostgreSQL, RDS, and S3 all work in concert to make that happen.
+I had previous experience with some parts of AWS, such as S3, EC2, and DynamoDB. However, for this application, I needed to learn RDS in order to host a PostgreSQL database on AWS and access that database from a web application not hosted on EC2, which required a Virtual Private Cloud (VPC). Because I am storing QR codes and parcel images in the database, I also needed to learn how Django, PostgreSQL, RDS, and S3 all work in concert to make that happen.
 
 <br/>
 
